@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <title>后台管理登录页面</title>
+    <link rel="icon" th:href="@{/img/Aurora_ico_2.jpg}" sizes="16x16">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            /*background-image: url("${pageContext.request.contextPath}/statics/img/20230721140006.png");*/
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+        }
+
+        .login-container {
+            width: 630px;
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 15px 25px rgba(0,0,0,0.5);
+            animation: slideIn 0.5s ease-in-out;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px 0;
+            font-size: 16px;
+            border: none;
+            outline: none;
+            background: none;
+            border-bottom: 1px solid grey;
+        }
+
+        .input-group span {
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 10px 0;
+            font-size: 16px;
+            margin-top: -3px;
+            transition: 0.5s;
+            color: #666;
+        }
+
+        .input-group input:focus ~ span,
+        .input-group input:valid ~ span {
+            color: #e91e63;
+            transform: translateY(-20px);
+        }
+
+        .login_btn {
+            width: 100%;
+            padding: 10px 0;
+            background: #e91e63;
+            border: none;
+            outline: none;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+            transition: background-color 0.5s;
+        }
+        .login_btn:hover {
+            background-color: skyblue;
+        }
+        .login_btn:disabled {
+            background-color: #ccc;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .home-btn {
+            text-decoration: none;
+            color: inherit;
+            border: none;
+            background-color: transparent;
+            cursor: pointer;
+            transition: color 0.5s;
+            font-size: 20px;
+        }
+
+        .home-btn:hover {
+            color: #008cff;
+        }
+
+    </style>
+</head>
+<body>
+<div class="login-container">
+    <form>
+        <a href="return_home" class="home-btn">←返回主页</a>
+        <br>
+        <img th:src="@{/img/Aurora_logo.png}" alt="" style="margin-top: 20px">
+        <h2>极光星系-AuroraGalaxy 官网 - 后台管理系统 - 身份验证</h2>
+        <div class="input-group">
+            <input type="text" required="required" id="username" name="username">
+            <span>Username</span>
+            <i></i>
+        </div>
+        <div class="input-group">
+            <input type="password" required="required" id="password" name="password">
+            <span>Password</span>
+            <i></i>
+        </div>
+        <span style="color: red;" id="login_message"></span>
+        <br>
+        <button type="button" class="login_btn" id="login_btn">访问</button>
+    </form>
+</div>
+<span id="disclaimers_state" th:text="${session.disclaimers_state}" style="display: none;"></span>
+</body>
+<!-- 点线粒子插件 -->
+<script color="255,0,255" opacity='0.9'
+        zIndex="-1" count="150"
+        src="/admin/js/canvas-nest.js" th:src="@{/admin/js/canvas-nest.js}"></script>
+<script th:src="@{/js/jquery.js}"></script>
+<script>
+
+    // document.addEventListener('DOMContentLoaded', function(){
+    //     let disclaimers_state = $("#disclaimers_state").text();
+    //     if (disclaimers_state === null || disclaimers_state === "" || disclaimers_state !== "true"){
+    //         location.href = "Not_disclaimers";
+    //     }
+    // })
+
+    $(document).ready(function() {
+        let login_btn = $(".login_btn");
+        login_btn.prop("disabled", true);
+        // login_btn.css("background-color", "#ccc");
+    });
+
+    //当用户名或密码输入框内容改变时，重新判断是否禁用或启用登录按钮
+    $('#username, #password').on('input', function() {
+        let username = $('#username').val();
+        let password = $('#password').val();
+        if(username !== "" && password !== "") {
+            $(".login_btn").prop("disabled", false);
+            // $(".login_btn").css("background-color", "#e91e63");
+        } else {
+            $(".login_btn").prop("disabled", true);
+            // $(".login_btn").css("background-color", "#ccc");
+        }
+    });
+
+    //登录
+    $(".login_btn").click(function() {
+        let username = $('#username').val();
+        let password = $('#password').val();
+        if(username === "" || password === "") {
+            $('#login_message').text("请填写用户名和密码");
+            return false;
+        } else {
+            $.ajax({
+                type: 'POST',
+                url: '/admin/verifyLogin',
+                data: {
+                    username: username,
+                    password: password
+                },
+                success: function(result) {
+                    if (result.code === 100) {
+                        location.href = result.extend.url;
+                    } else {
+                        $('#password').val('');
+                        $(".login_btn").prop("disabled", true);
+                        $('#login_message').text("用户名或密码错误");
+                    }
+                }
+            });
+        }
+    });
+</script>
+</html>

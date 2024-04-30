@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <title>后台管理系统</title>
+    <!-- 引入bootstrap样式 -->
+    <link th:href="@{/admin/bootstrap/css/bootstrap.css}" rel="stylesheet" type="text/css">
+    <!--图标库-->
+    <link th:href="@{/admin/lyear/css/materialdesignicons.min.css}" rel="stylesheet" type="text/css"/>
+    <!--弹出框样式-->
+    <link th:href="@{/admin/lyear/jconfirm/jquery-confirm.min.css}" rel="stylesheet" type="text/css"/>
+    <!--自定义样式-->
+    <link href="../admin/lyear/css/style.min.css" th:href="@{/admin/lyear/css/style.min.css}" rel="stylesheet" type="text/css"/>
+
+</head>
+<body>
+<div class="lyear-layout-web">
+    <div class="lyear-layout-container">
+        <!--左侧导航-->
+        <div th:replace="admin/common/leftbar::#leftbaraside"></div>
+        <!--头部信息-->
+        <div th:replace="admin/common/topbar::#topbarheader"></div>
+
+        <!--页面主要内容-->
+        <main class="lyear-layout-content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>AuroraGalaxy（极光星系）服务器官网后台管理系统</h4>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>感谢使用本系统，已获取您的登录ip地址并上报服务器，权限认证通过</h4>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>请使用侧边栏选项进行各项数据操作，数据修改无法恢复，请谨慎操作！</h4>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>当前服务器在线玩家：-未知-</h4>
+                            </div>
+                            <div class="card-header">
+                                <h4>当日新增留言：-未知-</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <!--End 页面主要内容-->
+
+    </div>
+</div>
+
+<!-- 引入jQuery和bootstrap的js -->
+<script th:src="@{/admin/js/jquery.js}"></script>
+<script th:src="@{/admin/bootstrap/js/bootstrap.js}"></script>
+<!--滚动条插件-->
+<script th:src="@{/admin/lyear/js/perfect-scrollbar.min.js}"></script>
+<!--弹出框js-->
+<script th:src="@{/admin/lyear/jconfirm/jquery-confirm.min.js}"></script>
+<!--自定义js脚本-->
+<script th:src="@{/admin/lyear/js/main.min.js}"></script>
+<script type="text/javascript">
+</script>
+</body>
+</html>
