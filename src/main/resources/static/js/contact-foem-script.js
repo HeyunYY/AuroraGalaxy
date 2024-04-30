@@ -154,9 +154,9 @@ function submitForm(){
         type: "POST",
         url: "submitMessage",
         data: {
-            "qq_number" : qq_number,
-            "qq_name" : qq_name,
-            "game_name" : game_name,
+            "qqNumber" : qq_number,
+            "qqName" : qq_name,
+            "gameName" : game_name,
             "message" : message,
             "messageTime" : formattedDate,
             "submitMethod" : _submitMethod

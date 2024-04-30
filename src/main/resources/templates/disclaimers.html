@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+<!--    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">-->
+<!--    <meta name="viewport"-->
+<!--          content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>-->
     <title>网站免责声明</title>
     <link rel="icon" th:href="@{/img/Aurora_ico_2.jpg}" sizes="16x16">
     <style>
@@ -47,27 +47,10 @@
             margin-right: 10px; /* 增加右边距，与 span 元素隔开 */
         }
 
-        /*.input-group span {*/
-        /*    position: absolute;*/
-        /*    top: 0;*/
-        /*    left: 0;*/
-        /*    padding: 10px 0;*/
-        /*    font-size: 16px;*/
-        /*    margin-top: -10px;*/
-        /*    transition: 0.5s;*/
-        /*    color: #666;*/
-        /*}*/
-
         .input-group span {
             font-size: 16px;
             color: #666;
         }
-
-        /*.input-group input:focus ~ span,*/
-        /*.input-group input:valid ~ span {*/
-        /*    color: #e91e63;*/
-        /*    transform: translateY(-20px);*/
-        /*}*/
 
         .submit-true {
             width: 100%;
@@ -103,6 +86,14 @@
             /*color: red; !* 鼠标悬停时文字颜色变为红色 *!*/
         }
 
+
+         /*Responsive styles */
+        @media only screen and (max-width: 600px) {
+            .login-container {
+                width: 100%;
+                border-radius: 0;
+            }
+        }
     </style>
 </head>
 <body>

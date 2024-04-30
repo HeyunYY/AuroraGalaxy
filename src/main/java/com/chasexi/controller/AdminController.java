@@ -1,6 +1,8 @@
 package com.chasexi.controller;
 
+import com.chasexi.service.MessageService;
 import com.chasexi.utils.JsonUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,6 +22,9 @@ import javax.servlet.http.HttpSession;
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
+    @Autowired
+    private MessageService messageService;
+
     @RequestMapping("/verifyLogin")
     public JsonUtils verifyLogin(@RequestParam("username")String username, @RequestParam("password")String password,
                                  HttpSession session){

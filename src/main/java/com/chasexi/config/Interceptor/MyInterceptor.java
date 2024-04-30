@@ -30,6 +30,10 @@ public class MyInterceptor implements HandlerInterceptor {
             System.out.println("发现资源请求：[" + requestURI + "] - 处理方式：放行");
             return true;
         }
+        if(requestURI.equals("/disclaimers_privacy.html")){
+            System.out.println("发现请求：[" + requestURI + "] - 处理方式：放行");
+            return true;
+        }
         if (requestURI.contains("/admin")) {
             if(requestURI.equals("/admin/verifyLogin")){
                 System.out.println("发现登录请求：[" + requestURI + "] - 处理方式：放行");

@@ -16,12 +16,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LeaveMessage {
-    private String qq_number;
-    private String qq_name;
-    private String game_name;
+    private int id;
+    private String qqNumber;
+    private String qqName;
+    private String gameName;
     private String message;
     private String messageTime;
     private String submitMethod;
     private String ip;
+    private int exhibition;
     private int show;
 }

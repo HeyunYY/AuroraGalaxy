@@ -1,9 +1,11 @@
 package com.chasexi.controller;
 
+import com.chasexi.entity.LeaveMessage;
+import com.chasexi.service.MessageService;
 import com.github.pagehelper.PageInfo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -22,14 +24,13 @@ import java.util.List;
 @Controller
 @RequestMapping("/admin")
 public class MainController {
+
+    @Autowired
+    private MessageService messageService;
+
     @RequestMapping("/index.html")
     public String index(Model model,@RequestParam(value = "pageNum", defaultValue = "1")String pageNum,
-                        @RequestParam(value = "pageSize", defaultValue = "10")String pageSize) {
-//        List<User> userList = userService.userStates();
-//        //分页
-//        PageInfo<User> userPageInfo = new PageInfo<>(userList);
-//        model.addAttribute("userPageInfo",userPageInfo);
-//        model.addAttribute("userList",userList);
+                        @RequestParam(value = "pageSize", defaultValue = "5")String pageSize) {
         model.addAttribute("pageTopBarInfo","系统首页");
         model.addAttribute("activeUrl","indexActive");
         return "admin/main";
@@ -37,12 +38,12 @@ public class MainController {
 
     @RequestMapping("/message/toMessage_All.html")
     public String Message_All(Model model,@RequestParam(value = "pageNum", defaultValue = "1")String pageNum,
-                        @RequestParam(value = "pageSize", defaultValue = "10")String pageSize) {
-//        List<User> userList = userService.userStates();
-//        //分页
-//        PageInfo<User> userPageInfo = new PageInfo<>(userList);
-//        model.addAttribute("userPageInfo",userPageInfo);
-//        model.addAttribute("userList",userList);
+                        @RequestParam(value = "pageSize", defaultValue = "5")String pageSize) {
+        List<LeaveMessage> messageList = messageService.selectMessageAll();
+        //分页
+        PageInfo<LeaveMessage> messagePageInfo = new PageInfo<>(messageList);
+        model.addAttribute("messagePageInfo",messagePageInfo);
+        model.addAttribute("messageList",messageList);
         model.addAttribute("pageTopBarInfo","全部信息");
         model.addAttribute("activeUrl1","message_Active");
         model.addAttribute("activeUrl2","message_All_Active");
@@ -50,7 +51,7 @@ public class MainController {
     }
     @RequestMapping("/message/toMessage_Show.html")
     public String Message_Show(Model model,@RequestParam(value = "pageNum", defaultValue = "1")String pageNum,
-                              @RequestParam(value = "pageSize", defaultValue = "10")String pageSize) {
+                              @RequestParam(value = "pageSize", defaultValue = "5")String pageSize) {
 //        List<User> userList = userService.userStates();
 //        //分页
 //        PageInfo<User> userPageInfo = new PageInfo<>(userList);
@@ -63,7 +64,7 @@ public class MainController {
     }
     @RequestMapping("/message/toMessage_NotShow.html")
     public String Message_NotShow(Model model,@RequestParam(value = "pageNum", defaultValue = "1")String pageNum,
-                              @RequestParam(value = "pageSize", defaultValue = "10")String pageSize) {
+                              @RequestParam(value = "pageSize", defaultValue = "5")String pageSize) {
 //        List<User> userList = userService.userStates();
 //        //分页
 //        PageInfo<User> userPageInfo = new PageInfo<>(userList);
