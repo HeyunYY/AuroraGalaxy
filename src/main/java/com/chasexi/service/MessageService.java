@@ -17,11 +17,13 @@ import java.util.List;
  * @Description:
  */
 public interface MessageService {
-    public List<LeaveMessage> selectMessageAll();
+    public List<LeaveMessage> selectMessageAll(int pageNum, int pageSize);
 
-    public List<LeaveMessage> selectMessageShow();
+    public LeaveMessage selectMessageById(int id);
 
-    public List<LeaveMessage> selectMessageNotShow();
+    public List<LeaveMessage> selectMessageShow(int pageNum, int pageSize);
+
+    public List<LeaveMessage> selectMessageNotShow(int pageNum, int pageSize);
 
     public int updateMessage(LeaveMessage leaveMessage);
 

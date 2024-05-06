@@ -39,21 +39,46 @@
                                         <thead>
                                         <tr>
                                             <th class="info">序号</th>
-                                            <th class="info">用户名</th>
-                                            <th class="info">信誉</th>
-                                            <th class="info">相关操作</th>
+                                            <th class="info">QQ号</th>
+                                            <th class="info">QQ名称</th>
+                                            <th class="info">游戏名称</th>
+                                            <th class="info">留言内容</th>
+                                            <th class="info">留言时间</th>
+                                            <th class="info">重要性</th>
+                                            <th class="info">展示状态</th>
+                                            <th class="info">操作</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr th:each="user:${userList}">
-                                            <td th:text="${(userPageInfo.pageNum - 1) * userPageInfo.pageSize+userStat.index+1}"></td>
-                                            <td th:text="${user.username}"></td>
-                                            <td th:text="${user.reputation}"></td>
+                                        <tr th:each="message:${messageList}">
+<!--                                            <td th:text="${(userPageInfo.pageNum - 1) * userPageInfo.pageSize+userStat.index+1}"></td>-->
+<!--                                            <td th:text="${user.username}"></td>-->
+<!--                                            <td th:text="${user.reputation}"></td>-->
+<!--                                            <td>-->
+<!--                                                <button class="btn btn-primary btn-sm update_btn"-->
+<!--                                                        th:attr="update-id=${user.id}">-->
+<!--															<span class="glyphicon glyphicon-pencil"-->
+<!--                                                                  aria-hidden="true"></span> 编辑-->
+<!--                                                </button>-->
+<!--                                            </td>-->
+                                            <td th:text="${(messagePageInfo.pageNum - 1) * messagePageInfo.pageSize + messageStat.index+1}"></td>
+                                            <td th:text="${message.qqNumber}"></td>
+                                            <td th:text="${message.qqName}==null?'未填写':${message.qqName}"></td>
+                                            <td th:text="${message.gameName}==null?'未填写':${message.gameName}"></td>
+                                            <td th:text="${message.message}==null?'未填写':${message.message}"></td>
+                                            <td th:text="${message.messageTime}==null?'未填写':${message.messageTime}"></td>
+                                            <td th:text="${message.submitMethod}==null?'未填写':${message.submitMethod}"></td>
+                                            <td th:text="${message.exhibition}==null?'未填写':${message.exhibition}"></td>
                                             <td>
                                                 <button class="btn btn-primary btn-sm update_btn"
-                                                        th:attr="update-id=${user.id}">
+                                                        th:attr="update-id=${message.id}">
 															<span class="glyphicon glyphicon-pencil"
                                                                   aria-hidden="true"></span> 编辑
+                                                </button>
+                                                <button class="btn btn-danger btn-sm delete_btn"
+                                                        th:attr="delete-id=${message.id},delete-name=${message.qqName}">
+															<span class="glyphicon glyphicon-trash"
+                                                                  aria-hidden="true"></span> 删除
                                                 </button>
                                             </td>
                                         </tr>
@@ -71,7 +96,7 @@
                                             <span>页次：</span>
                                         </button>
                                         <button class="btn btn-default">
-                                            <span th:text="${userPageInfo.pageNum}+'/'+${userPageInfo.pages}+'页'"></span>
+                                            <span th:text="${messagePageInfo.pageNum}+'/'+${messagePageInfo.pages}+'页'"></span>
                                         </button>
                                         <button class="btn btn-default">
                                             <span>每页显示：</span>
@@ -81,13 +106,13 @@
                                                     class="btn btn-default dropdown-toggle"
                                                     data-toggle="dropdown" aria-haspopup="true"
                                                     aria-expanded="false"><span
-                                                    th:text="${userPageInfo.pageSize}"></span>
+                                                    th:text="${messagePageInfo.pageSize}"></span>
                                                 <span class="caret"></span>
                                             </button>
                                             <ul class="dropdown-menu">
                                                 <li th:each="i:${#numbers.sequence(1,10)}">
                                                     <a th:text="${i}"
-                                                       th:href="@{/admin/userinfo/toReputation.html(pageNum=${userPageInfo.pageNum},pageSize=${i})}"></a>
+                                                       th:href="@{/admin/userinfo/toReputation.html(pageNum=${messagePageInfo.pageNum},pageSize=${i})}"></a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -98,7 +123,7 @@
                                             <span>总记录数：</span>
                                         </button>
                                         <button class="btn btn-default">
-                                            <span th:text="${userPageInfo.total}+'条'"></span>
+                                            <span th:text="${messagePageInfo.total}+'条'"></span>
                                         </button>
                                     </div>
                                 </div>
@@ -110,33 +135,33 @@
                                         <ul class="pagination pagination-lg pull-right"
                                             style="margin-top: 0">
                                             <li>
-                                                <a th:href="@{/admin/userinfo/toReputation.html(pageNum=1,pageSize=${userPageInfo.pageSize})}">首页</a>
+                                                <a th:href="@{/admin/userinfo/toReputation.html(pageNum=1,pageSize=${messagePageInfo.pageSize})}">首页</a>
                                             </li>
 
-                                            <li th:if="${userPageInfo.hasPreviousPage }"><a
-                                                    th:href="@{/admin/userinfo/toReputation.html(pageNum=${userPageInfo.pageNum}-1,pageSize=${userPageInfo.pageSize})}"
+                                            <li th:if="${messagePageInfo.hasPreviousPage }"><a
+                                                    th:href="@{/admin/userinfo/toReputation.html(pageNum=${messagePageInfo.pageNum}-1,pageSize=${messagePageInfo.pageSize})}"
                                                     aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
                                             </a></li>
 
-                                            <li th:each="page_Num:${userPageInfo.navigatepageNums }"
-                                                th:class="${page_Num == userPageInfo.pageNum?'active':''}">
-                                                <a th:if="${page_Num == userPageInfo.pageNum}"
+                                            <li th:each="page_Num:${messagePageInfo.navigatepageNums }"
+                                                th:class="${page_Num == messagePageInfo.pageNum?'active':''}">
+                                                <a th:if="${page_Num == messagePageInfo.pageNum}"
                                                    th:text="${page_Num}"
                                                    th:href="@{#}">
                                                 </a>
                                                 <a th:text="${page_Num}"
-                                                   th:if="${page_Num != userPageInfo.pageNum}"
-                                                   th:href="@{/admin/userinfo/toReputation.html(pageNum=${page_Num},pageSize=${userPageInfo.pageSize})}">
+                                                   th:if="${page_Num != messagePageInfo.pageNum}"
+                                                   th:href="@{/admin/userinfo/toReputation.html(pageNum=${page_Num},pageSize=${messagePageInfo.pageSize})}">
                                                 </a>
                                             </li>
 
-                                            <li th:if="${userPageInfo.hasNextPage }"><a
-                                                    th:href="@{/admin/userinfo/toReputation.html(pageNum=${userPageInfo.pageNum}+1,pageSize=${userPageInfo.pageSize})}"
+                                            <li th:if="${messagePageInfo.hasNextPage }"><a
+                                                    th:href="@{/admin/userinfo/toReputation.html(pageNum=${messagePageInfo.pageNum}+1,pageSize=${messagePageInfo.pageSize})}"
                                                     aria-label="Next"> <span aria-hidden="true">&raquo;</span>
                                             </a></li>
 
                                             <li><a
-                                                    th:href="@{/admin/userinfo/toReputation.html(pageNum=${userPageInfo.pages},pageSize=${userPageInfo.pageSize})}">末页</a>
+                                                    th:href="@{/admin/userinfo/toReputation.html(pageNum=${messagePageInfo.pages},pageSize=${messagePageInfo.pageSize})}">末页</a>
                                             </li>
                                         </ul>
                                     </nav>
@@ -272,9 +297,9 @@
                     $("#userUpdateModal").modal('hide');
                     $.alert('用户信誉修改成功！');
                     setTimeout(function () {
-                        var pageNum = [[${userPageInfo.pageNum}]];
-                        var pageSize = [[${userPageInfo.pageSize}]];
-                        location.href = "/admin/userinfo/toReputation.html?pageNum=" + pageNum + "&pageSize=" + pageSize;
+                        var pageNum = [[${messagePageInfo.pageNum}]];
+                        var pageSize = [[${messagePageInfo.pageSize}]];
+                        location.href = "/admin/userinfo/toMessage_Show.html?pageNum=" + pageNum + "&pageSize=" + pageSize;
                     }, 1000);
                 } else {
                     $.alert('用户信誉修改失败！');

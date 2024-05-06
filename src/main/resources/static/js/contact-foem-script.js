@@ -20,6 +20,8 @@ let qqRegExp = /^[1-9]\d{4,11}$/;
 $('#qq_number').on('blur', function() {
     let qqNumber = $(this).val();
     if (!qqRegExp.test(qqNumber)) {
+
+
         $('#qq_number-error').text('请输入正确的QQ号码');
     }else {
         $('#qq_number-error').text('');
@@ -231,7 +233,7 @@ function getRemainingTime() {
             localStorage.setItem("lastSubmitTime", currentTime);
             return 0; // 可以立即提交
         } else {
-            return 600 - secondsPassed;
+            return 300 - secondsPassed;
         }
     } else {
         const currentTime = new Date();

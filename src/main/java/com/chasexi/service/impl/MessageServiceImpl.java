@@ -3,6 +3,7 @@ package com.chasexi.service.impl;
 import com.chasexi.dao.MessageMapper;
 import com.chasexi.entity.LeaveMessage;
 import com.chasexi.service.MessageService;
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,17 +24,25 @@ public class MessageServiceImpl implements MessageService {
     private MessageMapper messageMapper;
 
     @Override
-    public List<LeaveMessage> selectMessageAll() {
+    public List<LeaveMessage> selectMessageAll(int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
         return messageMapper.selectMessageAll();
     }
 
     @Override
-    public List<LeaveMessage> selectMessageShow() {
+    public LeaveMessage selectMessageById(int id) {
+        return messageMapper.selectMessageById(id);
+    }
+
+    @Override
+    public List<LeaveMessage> selectMessageShow(int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
         return messageMapper.selectMessageShow();
     }
 
     @Override
-    public List<LeaveMessage> selectMessageNotShow() {
+    public List<LeaveMessage> selectMessageNotShow(int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
         return messageMapper.selectMessageNotShow();
     }
 

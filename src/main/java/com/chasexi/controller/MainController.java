@@ -29,17 +29,17 @@ public class MainController {
     private MessageService messageService;
 
     @RequestMapping("/index.html")
-    public String index(Model model,@RequestParam(value = "pageNum", defaultValue = "1")String pageNum,
-                        @RequestParam(value = "pageSize", defaultValue = "5")String pageSize) {
+    public String index(Model model,@RequestParam(value = "pageNum", defaultValue = "1")int pageNum,
+                        @RequestParam(value = "pageSize", defaultValue = "5")int pageSize) {
         model.addAttribute("pageTopBarInfo","系统首页");
         model.addAttribute("activeUrl","indexActive");
         return "admin/main";
     }
 
     @RequestMapping("/message/toMessage_All.html")
-    public String Message_All(Model model,@RequestParam(value = "pageNum", defaultValue = "1")String pageNum,
-                        @RequestParam(value = "pageSize", defaultValue = "5")String pageSize) {
-        List<LeaveMessage> messageList = messageService.selectMessageAll();
+    public String Message_All(Model model,@RequestParam(value = "pageNum", defaultValue = "1")int pageNum,
+                        @RequestParam(value = "pageSize", defaultValue = "10")int pageSize) {
+        List<LeaveMessage> messageList = messageService.selectMessageAll(pageNum,pageSize);
         //分页
         PageInfo<LeaveMessage> messagePageInfo = new PageInfo<>(messageList);
         model.addAttribute("messagePageInfo",messagePageInfo);
@@ -50,21 +50,21 @@ public class MainController {
         return "admin/message/messageAll";
     }
     @RequestMapping("/message/toMessage_Show.html")
-    public String Message_Show(Model model,@RequestParam(value = "pageNum", defaultValue = "1")String pageNum,
-                              @RequestParam(value = "pageSize", defaultValue = "5")String pageSize) {
-//        List<User> userList = userService.userStates();
-//        //分页
-//        PageInfo<User> userPageInfo = new PageInfo<>(userList);
-//        model.addAttribute("userPageInfo",userPageInfo);
-//        model.addAttribute("userList",userList);
-        model.addAttribute("pageTopBarInfo","全部信息");
+    public String Message_Show(Model model,@RequestParam(value = "pageNum", defaultValue = "1")int pageNum,
+                              @RequestParam(value = "pageSize", defaultValue = "10")int pageSize) {
+        List<LeaveMessage> messageList = messageService.selectMessageShow(pageNum,pageSize);
+        //分页
+        PageInfo<LeaveMessage> messagePageInfo = new PageInfo<>(messageList);
+        model.addAttribute("messagePageInfo",messagePageInfo);
+        model.addAttribute("messageList",messageList);
+        model.addAttribute("pageTopBarInfo","展示信息");
         model.addAttribute("activeUrl1","message_Active");
         model.addAttribute("activeUrl2","message_Show_Active");
         return "admin/message/messageShow";
     }
     @RequestMapping("/message/toMessage_NotShow.html")
-    public String Message_NotShow(Model model,@RequestParam(value = "pageNum", defaultValue = "1")String pageNum,
-                              @RequestParam(value = "pageSize", defaultValue = "5")String pageSize) {
+    public String Message_NotShow(Model model,@RequestParam(value = "pageNum", defaultValue = "1")int pageNum,
+                              @RequestParam(value = "pageSize", defaultValue = "10")int pageSize) {
 //        List<User> userList = userService.userStates();
 //        //分页
 //        PageInfo<User> userPageInfo = new PageInfo<>(userList);

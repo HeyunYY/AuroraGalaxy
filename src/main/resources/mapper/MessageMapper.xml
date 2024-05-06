@@ -5,4 +5,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="com.chasexi.dao.MessageMapper">
 
+    <update id="updateMessage">
+        UPDATE leave_message
+        <set>
+            <if test="qqNumber != null">qqNumber=#{qqNumber},</if>
+            <if test="qqName != null">qqName=#{qqName},</if>
+            <if test="gameName != null">gameName=#{gameName},</if>
+            <if test="message != null">message=#{message},</if>
+            <if test="messageTime != null">messageTime=#{messageTime},</if>
+            <if test="submitMethod != null">submitMethod=#{submitMethod},</if>
+            <if test="exhibition != null">exhibition=#{exhibition}</if>
+        </set>
+        WHERE id=#{id}
+    </update>
 </mapper>

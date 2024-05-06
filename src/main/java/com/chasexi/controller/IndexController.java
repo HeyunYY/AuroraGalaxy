@@ -78,6 +78,7 @@ public class IndexController {
     @ResponseBody
     @RequestMapping("/submitMessage")
     public String submitMessage(LeaveMessage leaveMessage) {
+        leaveMessage.setExhibition(0);
         int i = indexService.submitMessage(leaveMessage);
         return String.valueOf(i);
     }

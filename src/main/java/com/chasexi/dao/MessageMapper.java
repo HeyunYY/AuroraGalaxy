@@ -19,15 +19,15 @@ public interface MessageMapper {
     @Select("select * from leave_message")
     public List<LeaveMessage> selectMessageAll();
 
+    @Select("select * from leave_message where id=#{id}")
+    public LeaveMessage selectMessageById(int id);
+
     @Select("select * from leave_message where exhibition = 1")
     public List<LeaveMessage> selectMessageShow();
 
     @Select("select * from leave_message where exhibition = 0")
     public List<LeaveMessage> selectMessageNotShow();
 
-    @Update("update leave_message set qqNumber=#{qqNumber},qqName=#{qqName}," +
-            "gameName=#{gameName},message=#{message},messageTime=#{messageTime}," +
-            "submitMethod=#{submitMethod},exhibition=#{exhibition} where id=#{id}")
     public int updateMessage(LeaveMessage leaveMessage);
 
     @Insert("insert into leave_message (qqNumber, qqName, gameName, message, messageTime, submitMethod, exhibition)" +

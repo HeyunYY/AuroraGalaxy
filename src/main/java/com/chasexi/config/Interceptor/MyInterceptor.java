@@ -30,7 +30,7 @@ public class MyInterceptor implements HandlerInterceptor {
             System.out.println("发现资源请求：[" + requestURI + "] - 处理方式：放行");
             return true;
         }
-        if(requestURI.equals("/disclaimers_privacy.html")){
+        if (requestURI.equals("/disclaimers_privacy.html")){
             System.out.println("发现请求：[" + requestURI + "] - 处理方式：放行");
             return true;
         }
@@ -47,7 +47,7 @@ public class MyInterceptor implements HandlerInterceptor {
             response.sendRedirect("/index.html");
             return false;
         }
-        if(requestURI.equals("/error")){
+        if (requestURI.equals("/error")){
             return true;
         }
         if (requestURI.equals("/")) {
@@ -57,7 +57,7 @@ public class MyInterceptor implements HandlerInterceptor {
         if (requestURI.equals("/Not_disclaimers")) {
             return true;
         }
-        if(requestURI.equals("/disclaimers_finish")){
+        if (requestURI.equals("/disclaimers_finish")){
             System.out.println("发现请求：[" + requestURI + "] - 处理方式：放行");
             return true;
         }

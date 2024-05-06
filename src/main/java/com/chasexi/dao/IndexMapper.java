@@ -17,6 +17,6 @@ import java.util.List;
 @Mapper
 public interface IndexMapper {
     @Insert("insert into leave_message (qqNumber, qqName, gameName, message, messageTime, submitMethod, exhibition) " +
-            "values (#{qqNumber},#{qqName},#{gameName},#{message},#{messageTime},#{submitMethod},0)")
+            "values (#{qqNumber},#{qqName},#{gameName},#{message},#{messageTime},#{submitMethod},#{exhibition})")
     public int submitMessage(LeaveMessage leaveMessage);
 }

@@ -22,8 +22,7 @@ public class LeaveMessage {
     private String gameName;
     private String message;
     private String messageTime;
-    private String submitMethod;
     private String ip;
+    private int submitMethod;
     private int exhibition;
-    private int show;
 }
