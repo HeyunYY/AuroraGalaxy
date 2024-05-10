@@ -27,23 +27,23 @@ public class MyInterceptor implements HandlerInterceptor {
 //        System.out.println("拦截器拦截到请求：" + requestURI);
         if (isResourceFile(removeJSessionID(requestURI))) {
             // 是资源文件，直接放行
-            System.out.println("发现资源请求：[" + requestURI + "] - 处理方式：放行");
+//            System.out.println("发现资源请求：[" + requestURI + "] - 处理方式：放行");
             return true;
         }
         if (requestURI.equals("/disclaimers_privacy.html")){
-            System.out.println("发现请求：[" + requestURI + "] - 处理方式：放行");
+//            System.out.println("发现请求：[" + requestURI + "] - 处理方式：放行");
             return true;
         }
         if (requestURI.contains("/admin")) {
             if(requestURI.equals("/admin/verifyLogin")){
-                System.out.println("发现登录请求：[" + requestURI + "] - 处理方式：放行");
+//                System.out.println("发现登录请求：[" + requestURI + "] - 处理方式：放行");
                 return true;
             }
             if (session.getAttribute("username") != null) {
-                System.out.println("发现请求：[" + requestURI + "] - 处理方式：放行");
+//                System.out.println("发现请求：[" + requestURI + "] - 处理方式：放行");
                 return true;
             }
-            System.err.println("发现请求：[" + requestURI + "] - 处理方式：拦截");
+//            System.err.println("发现请求：[" + requestURI + "] - 处理方式：拦截");
             response.sendRedirect("/index.html");
             return false;
         }
@@ -51,30 +51,30 @@ public class MyInterceptor implements HandlerInterceptor {
             return true;
         }
         if (requestURI.equals("/")) {
-            System.out.println("发现请求：[" + requestURI + "] - 处理方式：放行");
+//            System.out.println("发现请求：[" + requestURI + "] - 处理方式：放行");
             return true;
         }
         if (requestURI.equals("/Not_disclaimers")) {
             return true;
         }
         if (requestURI.equals("/disclaimers_finish")){
-            System.out.println("发现请求：[" + requestURI + "] - 处理方式：放行");
+//            System.out.println("发现请求：[" + requestURI + "] - 处理方式：放行");
             return true;
         }
 
         //增加对disclaimers_state属性的非空检查
         String state = (String) session.getAttribute("disclaimers_state");
         if (state == null || state.isEmpty()) {
-            System.err.println("发现请求：[" + requestURI + "] - 处理方式：拦截");
+//            System.err.println("发现请求：[" + requestURI + "] - 处理方式：拦截");
             response.sendRedirect("/Not_disclaimers");
             return false;
         }
         if (!("true").equals(state)) {
-            System.err.println("发现请求：[" + requestURI + "] - 处理方式：拦截");
+//            System.err.println("发现请求：[" + requestURI + "] - 处理方式：拦截");
             response.sendRedirect("/Not_disclaimers");
             return false;
         }
-        System.out.println("发现请求：[" + requestURI + "] - 处理方式：放行");
+//        System.out.println("发现请求：[" + requestURI + "] - 处理方式：放行");
         return true; // 允许请求通过
     }
 

@@ -8,8 +8,8 @@
         <version>2.4.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.crazy.finance</groupId>
-    <artifactId>AuroraGalaxy_Maven</artifactId>
+    <groupId>com.aurora.chasexi</groupId>
+    <artifactId>AuroraGalaxy</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>finance</name>
     <description>Demo project for Spring Boot</description>

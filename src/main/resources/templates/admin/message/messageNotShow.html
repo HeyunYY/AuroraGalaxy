@@ -14,6 +14,7 @@
     <!--自定义样式-->
     <link href="../admin/lyear/css/style.min.css" th:href="@{/admin/lyear/css/style.min.css}" rel="stylesheet" type="text/css"/>
 
+    <link th:href="@{/admin/bootstrap/css/message.css}" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div class="lyear-layout-web">
@@ -30,37 +31,43 @@
                     <div class="col-lg-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4>留言信息-不展示</h4>
+                                <h4>留言信息-未展示</h4>
                             </div>
 
-                            <div class="card-body">
+                            <div th:if="${!messageList.isEmpty()}" class="card-body">
                                 <div class="table-responsive">
                                     <table class="table table-hover table-striped">
                                         <thead>
                                         <tr>
                                             <th class="info">序号</th>
-                                            <th class="info">所属用户</th>
-                                            <th class="info">所属银行</th>
-                                            <th class="info">类型</th>
-                                            <th class="info">银行卡号</th>
-                                            <th class="info">相关操作</th>
+                                            <th class="info">QQ号</th>
+                                            <th class="info">QQ名称</th>
+                                            <th class="info">游戏名称</th>
+                                            <th class="info">留言内容</th>
+                                            <th class="info">留言时间</th>
+                                            <th class="info">重要性</th>
+                                            <th class="info">展示状态</th>
+                                            <th class="info">操作</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr th:each="bankcard:${bankcardList}">
-                                            <td th:text="${(bankcardPageInfo.pageNum - 1) * bankcardPageInfo.pageSize+bankcardStat.index+1}"></td>
-                                            <td th:text="${bankcard.user.username}"></td>
-                                            <td th:text="${bankcard.cardbank}"></td>
-                                            <td th:text="${bankcard.type==1?'借记卡':'信用卡'}"></td>
-                                            <td th:text="${bankcard.cardnum}"></td>
+                                        <tr th:each="message:${messageList}">
+                                            <td th:text="${(messagePageInfo.pageNum - 1) * messagePageInfo.pageSize + messageStat.index+1}"></td>
+                                            <td th:text="${message.qqNumber}"></td>
+                                            <td th:text="${message.qqName}==null?'未填写':${message.qqName}"></td>
+                                            <td th:text="${message.gameName}==null?'未填写':${message.gameName}"></td>
+                                            <td th:text="${message.message}==null?'未填写':${message.message}"></td>
+                                            <td th:text="${message.messageTime}==null?'未填写':${message.messageTime}"></td>
+                                            <td th:text="${message.submitMethod}==null?'未填写':${message.submitMethod}"></td>
+                                            <td th:text="${message.exhibition}==null?'未填写':${message.exhibition}"></td>
                                             <td>
                                                 <button class="btn btn-primary btn-sm update_btn"
-                                                        th:attr="update-id=${bankcard.id}">
+                                                        th:attr="update-id=${message.id}">
 															<span class="glyphicon glyphicon-pencil"
                                                                   aria-hidden="true"></span> 编辑
                                                 </button>
                                                 <button class="btn btn-danger btn-sm delete_btn"
-                                                        th:attr="delete-id=${bankcard.id},delete-name=${bankcard.user.username}">
+                                                        th:attr="delete-id=${message.id},delete-name=${message.gameName}">
 															<span class="glyphicon glyphicon-trash"
                                                                   aria-hidden="true"></span> 删除
                                                 </button>
@@ -71,8 +78,12 @@
                                 </div>
                             </div>
 
+                            <div th:if="${messageList.isEmpty()}" class="panel-body">
+                                <h4>暂时没有未展示的留言信息</h4>
+                            </div>
+
                             <!-- 显示分页信息 -->
-                            <div class="row">
+                            <div th:if="${!messageList.isEmpty()}" class="row">
 
                                 <div class="col-md-5 col-md-offset-1">
                                     <div class="btn-group">
@@ -80,7 +91,7 @@
                                             <span>页次：</span>
                                         </button>
                                         <button class="btn btn-default">
-                                            <span th:text="${bankcardPageInfo.pageNum}+'/'+${bankcardPageInfo.pages}+'页'"></span>
+                                            <span th:text="${messagePageInfo.pageNum}+'/'+${messagePageInfo.pages}+'页'"></span>
                                         </button>
                                         <button class="btn btn-default">
                                             <span>每页显示：</span>
@@ -90,13 +101,13 @@
                                                     class="btn btn-default dropdown-toggle"
                                                     data-toggle="dropdown" aria-haspopup="true"
                                                     aria-expanded="false"><span
-                                                    th:text="${bankcardPageInfo.pageSize}"></span>
+                                                    th:text="${messagePageInfo.pageSize}"></span>
                                                 <span class="caret"></span>
                                             </button>
                                             <ul class="dropdown-menu">
                                                 <li th:each="i:${#numbers.sequence(1,10)}">
                                                     <a th:text="${i}"
-                                                       th:href="@{/admin/userinfo/toBankCard.html(pageNum=${bankcardPageInfo.pageNum},pageSize=${i})}"></a>
+                                                       th:href="@{/admin/message/toMessage_NotShow.html(pageNum=${messagePageInfo.pageNum},pageSize=${i})}"></a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -107,7 +118,7 @@
                                             <span>总记录数：</span>
                                         </button>
                                         <button class="btn btn-default">
-                                            <span th:text="${bankcardPageInfo.total}+'条'"></span>
+                                            <span th:text="${messagePageInfo.total}+'条'"></span>
                                         </button>
                                     </div>
                                 </div>
@@ -118,33 +129,33 @@
                                         <ul class="pagination pagination-lg pull-right"
                                             style="margin-top: 0">
                                             <li>
-                                                <a th:href="@{/admin/userinfo/toBankCard.html(pageNum=1,pageSize=${bankcardPageInfo.pageSize})}">首页</a>
+                                                <a th:href="@{/admin/message/toMessage_NotShow.html(pageNum=1,pageSize=${messagePageInfo.pageSize})}">首页</a>
                                             </li>
 
-                                            <li th:if="${bankcardPageInfo.hasPreviousPage }"><a
-                                                    th:href="@{/admin/userinfo/toBankCard.html(pageNum=${bankcardPageInfo.pageNum}-1,pageSize=${bankcardPageInfo.pageSize})}"
+                                            <li th:if="${messagePageInfo.hasPreviousPage }"><a
+                                                    th:href="@{/admin/message/toMessage_NotShow.html(pageNum=${messagePageInfo.pageNum}-1,pageSize=${messagePageInfo.pageSize})}"
                                                     aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
                                             </a></li>
 
-                                            <li th:each="page_Num:${bankcardPageInfo.navigatepageNums }"
-                                                th:class="${page_Num == bankcardPageInfo.pageNum?'active':''}">
-                                                <a th:if="${page_Num == bankcardPageInfo.pageNum}"
+                                            <li th:each="page_Num:${messagePageInfo.navigatepageNums }"
+                                                th:class="${page_Num == messagePageInfo.pageNum?'active':''}">
+                                                <a th:if="${page_Num == messagePageInfo.pageNum}"
                                                    th:text="${page_Num}"
                                                    th:href="@{#}">
                                                 </a>
                                                 <a th:text="${page_Num}"
-                                                   th:if="${page_Num != bankcardPageInfo.pageNum}"
-                                                   th:href="@{/admin/userinfo/toBankCard.html(pageNum=${page_Num},pageSize=${bankcardPageInfo.pageSize})}">
+                                                   th:if="${page_Num != messagePageInfo.pageNum}"
+                                                   th:href="@{/admin/message/toMessage_NotShow.html(pageNum=${page_Num},pageSize=${messagePageInfo.pageSize})}">
                                                 </a>
                                             </li>
 
-                                            <li th:if="${bankcardPageInfo.hasNextPage }"><a
-                                                    th:href="@{/admin/userinfo/toBankCard.html(pageNum=${bankcardPageInfo.pageNum}+1,pageSize=${bankcardPageInfo.pageSize})}"
+                                            <li th:if="${messagePageInfo.hasNextPage }"><a
+                                                    th:href="@{/admin/message/toMessage_NotShow.html(pageNum=${messagePageInfo.pageNum}+1,pageSize=${messagePageInfo.pageSize})}"
                                                     aria-label="Next"> <span aria-hidden="true">&raquo;</span>
                                             </a></li>
 
                                             <li><a
-                                                    th:href="@{/admin/userinfo/toBankCard.html(pageNum=${bankcardPageInfo.pages},pageSize=${bankcardPageInfo.pageSize})}">末页</a>
+                                                    th:href="@{/admin/message/toMessage_NotShow.html(pageNum=${messagePageInfo.pages},pageSize=${messagePageInfo.pageSize})}">末页</a>
                                             </li>
                                         </ul>
                                     </nav>
@@ -154,8 +165,8 @@
                         </div>
                     </div>
 
-                    <!-- 修改银行卡的模态框 -->
-                    <div class="modal fade" id="bankcardUpdateModal" tabindex="-1"
+                    <!-- 修改留言的模态框 -->
+                    <div class="modal fade" id="UpdateModal" tabindex="-1"
                          role="dialog" aria-labelledby="myModalLabel">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
@@ -164,60 +175,65 @@
                                             aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
-                                    <h4 class="modal-title">修改银行卡信息</h4>
+                                    <h4 class="modal-title">修改留言信息</h4>
                                 </div>
                                 <div class="modal-body">
                                     <!--要提交的表单 -->
                                     <form class="form-horizontal">
                                         <div class="form-group">
-                                            <label class="col-sm-2 control-label">所属用户：</label>
+                                            <label class="col-sm-2 control-label">qq号：</label>
                                             <div class="col-sm-6">
-                                                <p class="form-control-static"
-                                                   id="username_update_input">
-                                                </p>
+                                                <input type="text" class="form-control";;;;
+                                                       id="qNumber_update_input" name="qqNumber"
+                                                       placeholder="该用户还未填写QQ昵称：">
                                                 <span class="help-block"></span>
-                                            </div>
-                                            <div class="col-sm-1">
-                                                <em style="color: red">*</em>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label class="col-sm-2 control-label">所属银行：</label>
+                                            <label class="col-sm-2 control-label">qq名称：</label>
                                             <div class="col-sm-6">
                                                 <input type="text" class="form-control"
-                                                       id="cardbank_update_input" name="cardbank"
-                                                       placeholder="请输入所属银行：">
+                                                       id="qName_update_input" name="qqName"
+                                                       placeholder="该用户还未填写QQ昵称：">
                                                 <span class="help-block"></span>
                                             </div>
-                                            <div class="col-sm-1">
-                                                <em style="color: red">*</em>
-                                            </div>
                                         </div>
                                         <div class="form-group">
-                                            <label class="col-sm-2 control-label">类型：</label>
-                                            <div class="col-sm-6">
-                                                <label class="lyear-radio radio-inline">
-                                                    <input type="radio" name="type" value="1"><span>借记卡</span>
-                                                </label>
-                                                <label class="lyear-radio radio-inline">
-                                                    <input type="radio" name="type" value="2"><span>信用卡</span>
-                                                </label>
-                                            </div>
-                                            <div class="col-sm-1">
-                                                <em style="color: #ff0000">*</em>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label class="col-sm-2 control-label">银行卡号：</label>
+                                            <label class="col-sm-2 control-label">游戏名称：</label>
                                             <div class="col-sm-6">
                                                 <input type="text" class="form-control"
-                                                       id="cardnum_update_input" name="cardnum"
-                                                       placeholder="请输入银行卡号：">
+                                                       id="gameName_update_input" name="gameName"
+                                                       placeholder="该用户还未填写游戏名称：">
                                                 <span class="help-block"></span>
                                             </div>
-                                            <div class="col-sm-1">
-                                                <em style="color: red">*</em>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">留言内容：</label>
+                                            <div class="col-sm-6">
+                                                <input type="text" class="form-control"
+                                                       id="message_update_input" name="message"
+                                                       placeholder="该用户还未填写留言内容：">
+                                                <span class="help-block"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">重要性：</label>
+                                            <div class="col-sm-6 submit-way">
+                                                <input type="radio" value="1" id="submitMethod_update_input1" name="submitMethod">
+                                                <label for="submitMethod_update_input1" class="custom-radio">留言/评价</label>
+                                                <input type="radio" value="2" id="submitMethod_update_input2" name="submitMethod">
+                                                <label for="submitMethod_update_input2" class="custom-radio">建议/反馈</label>
+                                                <span class="help-block"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">是否展示：</label>
+                                            <div class="col-sm-6 submit-way">
+                                                <input type="radio" value="0" id="exhibition_update_input1" name="exhibition">
+                                                <label for="exhibition_update_input1" class="custom-radio">不展示</label>
+                                                <input type="radio" value="1" id="exhibition_update_input2" name="exhibition">
+                                                <label for="exhibition_update_input2" class="custom-radio">展示</label>
+                                                <span class="help-block"></span>
                                             </div>
                                         </div>
                                     </form>
@@ -227,7 +243,7 @@
                                             data-dismiss="modal">关闭
                                     </button>
                                     <button type="button" class="btn btn-primary"
-                                            id="bankcard_update_btn">更新
+                                            id="message_update_btn">更新
                                     </button>
                                 </div>
                             </div>
@@ -256,83 +272,109 @@
     $(document).on("click", ".update_btn", function () {
 
         //根据用户id发送ajax请求，查出用户信息并显示
-        getBankcardInfo($(this).attr("update-id"));
+        getMessageInfo($(this).attr("update-id"));
 
         //把用户的id传递给模态框的更新按钮
-        $("#bankcard_update_btn").attr("update-id", $(this).attr("update-id"));
-        $("#bankcardUpdateModal").modal({
+        $("#message_update_btn").attr("update-id", $(this).attr("update-id"));
+        $("#UpdateModal").modal({
             backdrop: "static"
         });
     });
 
-    //根据id查出用户信息并显示
-    function getBankcardInfo(id) {
+    //根据id查出信息并显示
+    function getMessageInfo(id) {
         $.ajax({
-            url: "/user/getBankCardById/" + id,
+            url: "/admin/getMessageById/" + id,
             type: "GET",
             success: function (result) {
-                var bankcard = result.extend.bankcard;
-
+                var message = result.extend.message;
                 //显示数据之前先清除一下校验样式，如果有的话
-                reset_form("#bankcardUpdateModal form");
+                reset_form("#UpdateModal form");
 
-                $("#username_update_input").text(messageAll.user.username);
-                $("#cardbank_update_input").val(messageAll.cardbank);
-                $("#cardnum_update_input").val(messageAll.cardnum);
-                $("#bankcardUpdateModal input[name=type]").val(
-                    [ messageAll.type ]);
+                $("#qNumber_update_input").val(message.qqNumber);
+                $("#qName_update_input").val(message.qqName);
+                $("#gameName_update_input").val(message.gameName);
+                $("#message_update_input").val(message.message);
+                if (message.submitMethod === 1) {
+                    $("#submitMethod_update_input1").prop("checked", true);
+                    $("#submitMethod_update_input2").prop("checked", false);
+                } else if (message.submitMethod === 2) {
+                    $("#submitMethod_update_input1").prop("checked", false);
+                    $("#submitMethod_update_input2").prop("checked", true);
+                }
+                if (message.exhibition === 0) {
+                    $("#exhibition_update_input1").prop("checked", true);
+                    $("#exhibition_update_input2").prop("checked", false);
+                } else if (message.exhibition === 1) {
+                    $("#exhibition_update_input1").prop("checked", false);
+                    $("#exhibition_update_input2").prop("checked", true);
+                }
             }
         });
     }
 
-    //点击更新，更新用户信息
-    $("#bankcard_update_btn").click(function () {
+    //点击更新，更新信息
+    $("#message_update_btn").click(function () {
         //清空表单样式
-        clean_form("#bankcardUpdateModal form");
+        clean_form("#UpdateModal form");
 
-        var cardBank = $("#cardbank_update_input").val();
-        var cardNum = $("#cardnum_update_input").val();
+        var qqNumber = $("#qNumber_update_input").val();
+        var qqName = $("#qName_update_input").val();
+        var gameName = $("#gameName_update_input").val();
+        var message = $("#message_update_input").val();
 
-        //匹配汉字(银行名称)
-        var cardBankRegex = /^[\u4e00-\u9fa5]{0,}$/;
-        if (cardBank === "") {
-            show_validate_msg("#cardbank_update_input",
-                "error", "银行名称为空");
+        let qqNumberRegex = /^[1-9]\d{3,11}$/;
+        if (qqNumber.length === 0) {
+            show_validate_msg("#qNumber_add_input", "error", "QQ号码为空");
             return false;
-        } else if (cardBankRegex.test(cardBank) === false) {
-            show_validate_msg("#cardbank_update_input",
-                "error", "银行名称不合法");
-            return false;
-        }
-
-        //匹配16-19位的数字
-        var cardNumRegex = /^\d{16,19}$/;
-        if (cardNum === "") {
-            show_validate_msg("#cardnum_update_input",
-                "error", "银行卡号为空");
-            return false;
-        } else if (cardNumRegex.test(cardNum) === false) {
-            show_validate_msg("#cardnum_update_input",
-                "error", "银行卡号不合法");
+        } else if (qqNumberRegex.test(qqNumber) === false) {
+            show_validate_msg("#qNumber_add_input", "error", "输入QQ号码不合法");
             return false;
         }
 
-        //2、发送ajax请求保存更新的银行卡数据
+        let qqNameRegex = /^[\u4E00-\u9FA5A-Za-z0-9_]{1,20}$/;
+        if (qqName.length === 0) {
+            show_validate_msg("#qName_update_input", "error", "QQ名称为空");
+            return false;
+        } else if (qqNameRegex.test(qqName) === false) {
+            show_validate_msg("#qName_update_input", "error", "QQ名称不合法");
+            return false;
+        }
+
+        //匹配汉字(真实姓名)
+        let gameNameRegex = /^\w{1,20}$/;
+        if (gameName.length === 0) {
+            show_validate_msg("#gameName_update_input", "error", "游戏名称为空");
+            return false;
+        } else if (gameNameRegex.test(gameName) === false) {
+            show_validate_msg("#gameName_update_input", "error", "游戏名称不合法（只能由数字、英文和下划线组成）");
+            return false;
+        }
+
+        let messageRegex = /^.{0,200}$/;
+        if (message.length !== 0) {
+            if (messageRegex.test(message) === false) {
+                show_validate_msg("#message_update_input", "error", "留言不合法（长度不超过200个字符）");
+                return false;
+            }
+        }
+
+        var id =$(this).attr("update-id");
         $.ajax({
-            url: "/user/updateBankCard/" + $(this).attr("update-id"),
+            url: "/admin/updateMessageProfile/" + id ,
             type: "PUT",
-            data: $("#bankcardUpdateModal form").serialize(),
+            data: $("#UpdateModal form").serialize(),
             success: function (result) {
                 if (result.code === 100) {
-                    $("#bankcardUpdateModal").modal('hide');
-                    $.alert('银行卡信息修改成功！');
+                    $("#UpdateModal").modal('hide');
+                    $.alert('留言信息修改成功！');
                     setTimeout(function () {
-                        var pageNum = [[${bankcardPageInfo.pageNum}]];
-                        var pageSize = [[${bankcardPageInfo.pageSize}]];
-                        location.href = "/admin/userinfo/toBankCard.html?pageNum=" + pageNum + "&pageSize=" + pageSize;
+                        var pageNum = [[${messagePageInfo.pageNum}]];
+                        var pageSize = [[${messagePageInfo.pageSize}]];
+                        location.href = "/admin/message/toMessage_NotShow.html?pageNum=" + pageNum + "&pageSize=" + pageSize;
                     }, 1000);
                 } else {
-                    $.alert('银行卡信息修改失败！');
+                    $.alert('留言信息修改失败！');
                 }
             }
         });
@@ -342,28 +384,28 @@
     $(document).on("click", ".delete_btn", function () {
         //1、弹出是否确认删除对话框
         var id = $(this).attr("delete-id");
-        var username = $(this).attr("delete-name");
+        var gameName = $(this).attr("delete-name");
         $.alert({
             title: '提示：',
-            content: "确定删除用户 <strong>" + username + "</strong> 的这张银行卡吗？",
+            content: "确定删除玩家 <strong>" + gameName + "</strong> 的留言吗？",
             buttons: {
                 confirm: {
                     text: '确认',
                     btnClass: 'btn-primary',
                     action: function () {
                         $.ajax({
-                            url: "/user/deleteBankCard/" + id,
+                            url: "/admin/deleteMessageById/" + id,
                             type: "DELETE",
                             success: function (result) {
                                 if (result.code === 100) {
-                                    $.alert('删除该银行卡成功！');
+                                    $.alert('删除该留言成功！');
                                     setTimeout(function () {
-                                        var pageNum = [[${bankcardPageInfo.pageNum}]];
-                                        var pageSize = [[${bankcardPageInfo.pageSize}]];
-                                        location.href = "/admin/userinfo/toBankCard.html?pageNum=" + pageNum + "&pageSize=" + pageSize;
+                                        var pageNum = [[${messagePageInfo.pageNum}]];
+                                        var pageSize = [[${messagePageInfo.pageSize}]];
+                                        location.href = "/admin/message/toMessage_NotShow.html?pageNum=" + pageNum + "&pageSize=" + pageSize;
                                     }, 1000);
                                 } else {
-                                    $.alert('删除该银行卡失败!');
+                                    $.alert('删除该留言失败!');
                                 }
                             }
                         });

@@ -34,7 +34,7 @@
                                 <h4>留言信息-全部</h4>
                             </div>
 
-                            <div class="card-body">
+                            <div th:if="${!messageList.isEmpty()}"  class="card-body">
                                 <div class="table-responsive">
                                     <table class="table table-hover table-striped">
                                         <thead>
@@ -67,7 +67,7 @@
                                                                   aria-hidden="true"></span> 编辑
                                                 </button>
                                                 <button class="btn btn-danger btn-sm delete_btn"
-                                                        th:attr="delete-id=${message.id},delete-name=${message.qqName}">
+                                                        th:attr="delete-id=${message.id},delete-name=${message.gameName}">
 															<span class="glyphicon glyphicon-trash"
                                                                   aria-hidden="true"></span> 删除
                                                 </button>
@@ -78,8 +78,12 @@
                                 </div>
                             </div>
 
+                            <div th:if="${messageList.isEmpty()}" class="panel-body">
+                                <h4>暂时没有留言信息</h4>
+                            </div>
+
                             <!-- 显示分页信息 -->
-                            <div class="row">
+                            <div th:if="${!messageList.isEmpty()}"  class="row">
 
                                 <!-- 新增按钮 -->
                                 <div class="col-md-1" style="margin-left: 24px">
@@ -384,7 +388,6 @@
             return false;
         }
 
-        //匹配汉字(真实姓名)
         let gameNameRegex = /^\w{1,20}$/;
         if (gameName.length === 0) {
             show_validate_msg("#gameName_add_input", "error", "游戏名称为空");
@@ -394,7 +397,7 @@
             return false;
         }
 
-        let messageRegex = /\d{1,200}$/;
+        let messageRegex = /^.{0,200}$/;
         if (message.length !== 0) {
             if (messageRegex.test(message) === false) {
                 show_validate_msg("#message_add_input", "error", "留言不合法（长度不超过200个字符）");
@@ -410,14 +413,14 @@
             success: function (result) {
                 if (result.code === 100) {
                     $("#AddModal").modal('hide');
-                    $.alert('用户新增成功！');
+                    $.alert('留言信息新增成功！');
                     setTimeout(function () {
                         let pageNum = [[${messagePageInfo.pages}]];
                         let pageSize = [[${messagePageInfo.pageSize}]];
                         location.href = "/admin/message/toMessage_All.html?pageNum=" + pageNum + "&pageSize=" + pageSize;
                     }, 1000);
                 } else {
-                    $.alert('用户新增失败！');
+                    $.alert('留言信息新增失败！');
                 }
             }
         });
@@ -436,7 +439,7 @@
         });
     });
 
-    //根据id查出用户信息并显示
+    //根据id查出信息并显示
     function getMessageInfo(id) {
         $.ajax({
             url: "/admin/getMessageById/" + id,
@@ -478,7 +481,7 @@
         var gameName = $("#gameName_update_input").val();
         var message = $("#message_update_input").val();
 
-        let qqNumberRegex = /^[1-9]\d{4,11}$/;
+        let qqNumberRegex = /^[1-9]\d{3,11}$/;
         if (qqNumber.length === 0) {
             show_validate_msg("#qNumber_add_input", "error", "QQ号码为空");
             return false;
@@ -506,7 +509,7 @@
             return false;
         }
 
-        let messageRegex = /\d{1,200}$/;
+        let messageRegex = /^.{0,200}$/;
         if (message.length !== 0) {
             if (messageRegex.test(message) === false) {
                 show_validate_msg("#message_update_input", "error", "留言不合法（长度不超过200个字符）");
@@ -515,7 +518,6 @@
         }
 
         var id =$(this).attr("update-id");
-        //2、发送ajax请求保存更新的员工数据
         $.ajax({
             url: "/admin/updateMessageProfile/" + id ,
             type: "PUT",
@@ -523,14 +525,14 @@
             success: function (result) {
                 if (result.code === 100) {
                     $("#UpdateModal").modal('hide');
-                    $.alert('用户信息修改成功！');
+                    $.alert('留言信息修改成功！');
                     setTimeout(function () {
                         var pageNum = [[${messagePageInfo.pageNum}]];
                         var pageSize = [[${messagePageInfo.pageSize}]];
                         location.href = "/admin/message/toMessage_All.html?pageNum=" + pageNum + "&pageSize=" + pageSize;
                     }, 1000);
                 } else {
-                    $.alert('用户信息修改失败！');
+                    $.alert('留言信息修改失败！');
                 }
             }
         });
@@ -540,28 +542,28 @@
     $(document).on("click", ".delete_btn", function () {
         //1、弹出是否确认删除对话框
         var id = $(this).attr("delete-id");
-        var username = $(this).attr("delete-name");
+        var gameName = $(this).attr("delete-name");
         $.alert({
             title: '提示：',
-            content: "确定删除用户 <strong>" + username + "</strong> 吗？",
+            content: "确定删除玩家 <strong>" + gameName + "</strong> 的留言吗？",
             buttons: {
                 confirm: {
                     text: '确认',
                     btnClass: 'btn-primary',
                     action: function () {
                         $.ajax({
-                            url: "/user/deleteUserById/" + id,
+                            url: "/admin/deleteMessageById/" + id,
                             type: "DELETE",
                             success: function (result) {
                                 if (result.code === 100) {
-                                    $.alert('删除该用户成功！');
+                                    $.alert('删除该留言成功！');
                                     setTimeout(function () {
                                         var pageNum = [[${messagePageInfo.pageNum}]];
                                         var pageSize = [[${messagePageInfo.pageSize}]];
                                         location.href = "/admin/message/toMessage_All.html?pageNum=" + pageNum + "&pageSize=" + pageSize;
                                     }, 1000);
                                 } else {
-                                    $.alert('删除该用户失败!');
+                                    $.alert('删除该留言失败!');
                                 }
                             }
                         });

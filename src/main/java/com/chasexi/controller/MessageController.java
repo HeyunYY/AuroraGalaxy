@@ -57,6 +57,15 @@ public class MessageController {
         return JsonUtils.fail();
     }
 
+    @DeleteMapping("/deleteMessageById/{id}")
+    public JsonUtils deleteMessageById(@PathVariable("id") int id){
+        int i = messageService.deleteMessage(id);
+        if (i > 0){
+            return JsonUtils.success();
+        }
+        return JsonUtils.fail();
+    }
+
     private String getDateTime(){
         // 获取当前时间
         LocalDateTime now = LocalDateTime.now();

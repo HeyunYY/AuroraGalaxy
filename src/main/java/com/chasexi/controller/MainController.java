@@ -65,12 +65,12 @@ public class MainController {
     @RequestMapping("/message/toMessage_NotShow.html")
     public String Message_NotShow(Model model,@RequestParam(value = "pageNum", defaultValue = "1")int pageNum,
                               @RequestParam(value = "pageSize", defaultValue = "10")int pageSize) {
-//        List<User> userList = userService.userStates();
-//        //分页
-//        PageInfo<User> userPageInfo = new PageInfo<>(userList);
-//        model.addAttribute("userPageInfo",userPageInfo);
-//        model.addAttribute("userList",userList);
-        model.addAttribute("pageTopBarInfo","全部信息");
+        List<LeaveMessage> messageList = messageService.selectMessageNotShow(pageNum,pageSize);
+        //分页
+        PageInfo<LeaveMessage> messagePageInfo = new PageInfo<>(messageList);
+        model.addAttribute("messagePageInfo",messagePageInfo);
+        model.addAttribute("messageList",messageList);
+        model.addAttribute("pageTopBarInfo","未展示信息");
         model.addAttribute("activeUrl1","message_Active");
         model.addAttribute("activeUrl2","message_NotShow_Active");
         return "admin/message/messageNotShow";

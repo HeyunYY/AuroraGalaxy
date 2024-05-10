@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
@@ -19,13 +20,14 @@ import javax.servlet.http.HttpSession;
  * @Description:
  */
 
-@RestController
+@Controller
 @RequestMapping("/admin")
 public class AdminController {
     @Autowired
     private MessageService messageService;
 
     @RequestMapping("/verifyLogin")
+    @ResponseBody
     public JsonUtils verifyLogin(@RequestParam("username")String username, @RequestParam("password")String password,
                                  HttpSession session){
         if (username.equals("admin")&&password.equals("admin")){
@@ -34,5 +36,11 @@ public class AdminController {
         }else {
             return JsonUtils.fail();
         }
+    }
+
+    @RequestMapping("/logout")
+    public String logout(HttpSession session){
+        session.removeAttribute("username");
+        return "index";
     }
 }
