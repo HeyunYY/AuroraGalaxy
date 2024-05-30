@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <title>后台管理系统</title>
+    <!-- 引入bootstrap样式 -->
+    <link th:href="@{/admin/bootstrap/css/bootstrap.css}" rel="stylesheet" type="text/css">
+    <!--图标库-->
+    <link th:href="@{/admin/lyear/css/materialdesignicons.min.css}" rel="stylesheet" type="text/css"/>
+    <!--弹出框样式-->
+    <link th:href="@{/admin/lyear/jconfirm/jquery-confirm.min.css}" rel="stylesheet" type="text/css"/>
+    <!--自定义样式-->
+    <link href="../admin/lyear/css/style.min.css" th:href="@{/admin/lyear/css/style.min.css}" rel="stylesheet" type="text/css"/>
+
+    <link th:href="@{/admin/bootstrap/css/message.css}" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div class="lyear-layout-web">
+    <div class="lyear-layout-container">
+        <!--左侧导航-->
+        <div th:replace="admin/common/leftbar::#leftbaraside"></div>
+        <!--头部信息-->
+        <div th:replace="admin/common/topbar::#topbarheader"></div>
+
+        <!--页面主要内容-->
+        <main class="lyear-layout-content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>登录信息</h4>
+                            </div>
+
+                            <div th:if="${!authmeList.isEmpty()}"  class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th class="info">序号</th>
+                                            <th class="info">用户名</th>
+                                            <th class="info">真实名称</th>
+                                            <th class="info">登录ip</th>
+                                            <th class="info">注册ip</th>
+                                            <th class="info">登录状态</th>
+                                            <th class="info">操作</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="message:${authmeList}">
+                                            <td th:text="${(authmePageInfo.pageNum - 1) * authmePageInfo.pageSize + messageStat.index+1}"></td>
+                                            <td th:text="${message.username}"></td>
+                                            <td th:text="${message.realname}==null?'未填写':${message.realname}"></td>
+                                            <td th:text="${message.ip}==null?'未填写':${message.ip}"></td>
+                                            <td th:text="${message.regip}==null?'未填写':${message.regip}"></td>
+                                            <td th:text="${message.isLogged}==null?'未填写':${message.isLogged}"></td>
+                                            <td>
+                                                <button class="btn btn-primary btn-sm update_btn"
+                                                        th:attr="update-id=${message.id}">
+															<span class="glyphicon glyphicon-pencil"
+                                                                  aria-hidden="true"></span> 编辑
+                                                </button>
+                                                <button class="btn btn-danger btn-sm delete_btn"
+                                                        th:attr="delete-id=${message.id},delete-name=${message.id}">
+															<span class="glyphicon glyphicon-trash"
+                                                                  aria-hidden="true"></span> 删除
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div th:if="${authmeList.isEmpty()}" class="panel-body">
+                                <h4>暂时没有登录信息</h4>
+                            </div>
+
+                            <!-- 显示分页信息 -->
+                            <div th:if="${!authmeList.isEmpty()}"  class="row">
+
+                                <!-- 新增按钮 -->
+                                <div class="col-md-1" style="margin-left: 24px">
+                                    <button id="message_add_modal_btn" class="btn btn-primary">新增</button>
+                                </div>
+
+                                <div class="col-md-5">
+                                    <div class="btn-group">
+                                        <button class="btn btn-default">
+                                            <span>页次：</span>
+                                        </button>
+                                        <button class="btn btn-default">
+                                            <span th:text="${authmePageInfo.pageNum}+'/'+${authmePageInfo.pages}+'页'"></span>
+                                        </button>
+                                        <button class="btn btn-default">
+                                            <span>每页显示：</span>
+                                        </button>
+                                        <div class="btn-group">
+                                            <button id="btnGroupDrop1"
+                                                    class="btn btn-default dropdown-toggle"
+                                                    data-toggle="dropdown" aria-haspopup="true"
+                                                    aria-expanded="false"><span
+                                                    th:text="${authmePageInfo.pageSize}"></span>
+                                                <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li th:each="i:${#numbers.sequence(1,10)}">
+                                                    <a th:text="${i}"
+                                                       th:href="@{/admin/data/toLoginData.html(pageNum=${authmePageInfo.pageNum},pageSize=${i})}"></a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <button class="btn btn-default">
+                                            <span>条</span>
+                                        </button>
+                                        <button class="btn btn-default">
+                                            <span>总记录数：</span>
+                                        </button>
+                                        <button class="btn btn-default">
+                                            <span th:text="${authmePageInfo.total}+'条'"></span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- 分页条信息 -->
+                                <div class="col-md-5">
+                                    <nav aria-label="Page navigation">
+                                        <ul class="pagination pagination-lg pull-right"
+                                            style="margin-top: 0">
+                                            <li>
+                                                <a th:href="@{/admin/data/toLoginData.html(pageNum=1,pageSize=${authmePageInfo.pageSize})}">首页</a>
+                                            </li>
+
+                                            <li th:if="${authmePageInfo.hasPreviousPage }"><a
+                                                    th:href="@{/admin/data/toLoginData.html(pageNum=${authmePageInfo.pageNum}-1,pageSize=${authmePageInfo.pageSize})}"
+                                                    aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
+                                            </a></li>
+
+                                            <li th:each="page_Num:${authmePageInfo.navigatepageNums }"
+                                                th:class="${page_Num == authmePageInfo.pageNum?'active':''}">
+                                                <a th:if="${page_Num == authmePageInfo.pageNum}"
+                                                   th:text="${page_Num}"
+                                                   th:href="@{#}">
+                                                </a>
+                                                <a th:text="${page_Num}"
+                                                   th:if="${page_Num != authmePageInfo.pageNum}"
+                                                   th:href="@{/admin/data/toLoginData.html(pageNum=${page_Num},pageSize=${authmePageInfo.pageSize})}">
+                                                </a>
+                                            </li>
+
+                                            <li th:if="${authmePageInfo.hasNextPage }"><a
+                                                    th:href="@{/admin/data/toLoginData.html(pageNum=${authmePageInfo.pageNum}+1,pageSize=${authmePageInfo.pageSize})}"
+                                                    aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+                                            </a></li>
+
+                                            <li><a
+                                                    th:href="@{/admin/data/toLoginData.html(pageNum=${authmePageInfo.pages},pageSize=${authmePageInfo.pageSize})}">末页</a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- 新增留言的模态框 -->
+                    <div class="modal fade" id="AddModal" tabindex="-1"
+                         role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal"
+                                            aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    <h4 class="modal-title">新增留言</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <!--要提交的表单 -->
+                                    <form class="form-horizontal">
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">qq号：</label>
+                                            <div class="col-sm-6">
+                                                <input type="text" class="form-control"
+                                                       id="qNumber_add_input" name="qqNumber"
+                                                       placeholder="请输入qq号：">
+                                                <span class="help-block"></span>
+                                            </div>
+                                            <div class="col-sm-1">
+                                                <em style="color: red">*</em>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">qq名称：</label>
+                                            <div class="col-sm-6">
+                                                <input type="text" class="form-control"
+                                                       id="qName_add_input" name="qqName"
+                                                       placeholder="请输入qq名称：">
+                                                <span class="help-block"></span>
+                                            </div>
+                                            <div class="col-sm-1">
+                                                <em style="color: red">*</em>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">游戏名称：</label>
+                                            <div class="col-sm-6">
+                                                <input type="text" class="form-control"
+                                                       id="gameName_add_input" name="gameName"
+                                                       placeholder="请输入游戏名称：">
+                                                <span class="help-block"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">留言内容：</label>
+                                            <div class="col-sm-6">
+                                                <textarea type="text" class="form-control"
+                                                          id="message_add_input" name="message"
+                                                          placeholder="请输入留言内容："></textarea>
+                                                <span class="help-block"></span>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default"
+                                            data-dismiss="modal">关闭
+                                    </button>
+                                    <button type="button" class="btn btn-primary"
+                                            id="message_save_btn">保存
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 修改留言的模态框 -->
+                    <div class="modal fade" id="UpdateModal" tabindex="-1"
+                         role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal"
+                                            aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    <h4 class="modal-title">修改留言信息</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <!--要提交的表单 -->
+                                    <form class="form-horizontal">
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">qq号：</label>
+                                            <div class="col-sm-6">
+                                                <input type="text" class="form-control"
+                                                       id="qNumber_update_input" name="qqNumber"
+                                                       placeholder="该用户还未填写QQ昵称：">
+                                                <span class="help-block"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">qq名称：</label>
+                                            <div class="col-sm-6">
+                                                <input type="text" class="form-control"
+                                                       id="qName_update_input" name="qqName"
+                                                       placeholder="该用户还未填写QQ昵称：">
+                                                <span class="help-block"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">游戏名称：</label>
+                                            <div class="col-sm-6">
+                                                <input type="text" class="form-control"
+                                                       id="gameName_update_input" name="gameName"
+                                                       placeholder="该用户还未填写游戏名称：">
+                                                <span class="help-block"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">留言内容：</label>
+                                            <div class="col-sm-6">
+                                                <input type="text" class="form-control"
+                                                       id="message_update_input" name="message"
+                                                       placeholder="该用户还未填写留言内容：">
+                                                <span class="help-block"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">重要性：</label>
+                                            <div class="col-sm-6 submit-way">
+                                                <input type="radio" value="1" id="submitMethod_update_input1" name="submitMethod">
+                                                <label for="submitMethod_update_input1" class="custom-radio">留言/评价</label>
+                                                <input type="radio" value="2" id="submitMethod_update_input2" name="submitMethod">
+                                                <label for="submitMethod_update_input2" class="custom-radio">建议/反馈</label>
+                                                <span class="help-block"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">是否展示：</label>
+                                            <div class="col-sm-6 submit-way">
+                                                <input type="radio" value="0" id="exhibition_update_input1" name="exhibition">
+                                                <label for="exhibition_update_input1" class="custom-radio">不展示</label>
+                                                <input type="radio" value="1" id="exhibition_update_input2" name="exhibition">
+                                                <label for="exhibition_update_input2" class="custom-radio">展示</label>
+                                                <span class="help-block"></span>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default"
+                                            data-dismiss="modal">关闭
+                                    </button>
+                                    <button type="button" class="btn btn-primary"
+                                            id="message_update_btn">更新
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+        <!--End 页面主要内容-->
+    </div>
+</div>
+
+<!-- 引入jQuery和bootstrap的js -->
+<script th:src="@{/admin/js/jquery.js}"></script>
+<script th:src="@{/admin/bootstrap/js/bootstrap.js}"></script>
+<!--滚动条插件-->
+<script th:src="@{/admin/lyear/js/perfect-scrollbar.min.js}"></script>
+<!--弹出框js-->
+<script th:src="@{/admin/lyear/jconfirm/jquery-confirm.min.js}"></script>
+<!--自定义js脚本-->
+<script th:src="@{/admin/lyear/js/main.min.js}"></script>
+<script th:src="@{/admin/js/md5.js}"></script>
+<script th:src="@{/js/getdatetime.js}"></script>
+<script type="text/javascript">
+
+    //点击新增按钮弹出模态框。
+    $("#message_add_modal_btn").click(function () {
+        //清除表单数据（表单完整重置（表单的数据，表单的样式））
+        reset_form("#AddModal form");
+        //弹出模态框
+        $("#AddModal").modal({
+            //点击增加框背景不删除增加框
+            backdrop: "static"
+        });
+    });
+
+    //点击保存，保存新增用户信息。
+    $("#message_save_btn").click(function () {
+        //清空表单样式
+        clean_form("#AddModal form");
+
+        let qqNumber = $("#qNumber_add_input").val();
+        let qqName = $("#qName_add_input").val();
+        let gameName = $("#gameName_add_input").val();
+        let message = $("#message_add_input").val();
+
+        let qqNumberRegex = /^[1-9]\d{4,11}$/;
+        if (qqNumber.length === 0) {
+            show_validate_msg("#qNumber_add_input", "error", "QQ号码为空");
+            return false;
+        } else if (qqNumberRegex.test(qqNumber) === false) {
+            show_validate_msg("#qNumber_add_input", "error", "输入QQ号码不合法");
+            return false;
+        }
+
+        let qqNameRegex = /^.{1,20}$/;
+        if (qqName.length === 0) {
+            show_validate_msg("#qName_add_input", "error", "QQ名称为空");
+            return false;
+        } else if (qqNameRegex.test(qqName) === false) {
+            show_validate_msg("#qName_add_input", "error", "QQ名称不合法");
+            return false;
+        }
+
+        let gameNameRegex = /^\w{1,20}$/;
+        if (gameName.length === 0) {
+            show_validate_msg("#gameName_add_input", "error", "游戏名称为空");
+            return false;
+        } else if (gameNameRegex.test(gameName) === false) {
+            show_validate_msg("#gameName_add_input", "error", "游戏名称不合法（只能由数字、英文和下划线组成）");
+            return false;
+        }
+
+        let messageRegex = /^.{0,200}$/;
+        if (message.length !== 0) {
+            if (messageRegex.test(message) === false) {
+                show_validate_msg("#message_add_input", "error", "留言不合法（长度不超过200个字符）");
+                return false;
+            }
+        }
+        $("#messageTime").val(getDateTime())
+        //2、发送ajax请求保存用户
+        $.ajax({
+            url: "/admin/addMessage",
+            type: "POST",
+            data:  $("#AddModal form").serialize(),
+            success: function (result) {
+                if (result.code === 100) {
+                    $("#AddModal").modal('hide');
+                    $.alert('留言信息新增成功！');
+                    setTimeout(function () {
+                        let pageNum = [[${authmePageInfo.pages}]];
+                        let pageSize = [[${authmePageInfo.pageSize}]];
+                        location.href = "/admin/data/toLoginData.html?pageNum=" + pageNum + "&pageSize=" + pageSize;
+                    }, 1000);
+                } else {
+                    $.alert('留言信息新增失败！');
+                }
+            }
+        });
+    });
+
+    //点击编辑按钮时触发事件
+    $(document).on("click", ".update_btn", function () {
+
+        //根据用户id发送ajax请求，查出用户信息并显示
+        getMessageInfo($(this).attr("update-id"));
+
+        //把用户的id传递给模态框的更新按钮
+        $("#message_update_btn").attr("update-id", $(this).attr("update-id"));
+        $("#UpdateModal").modal({
+            backdrop: "static"
+        });
+    });
+
+    //根据id查出信息并显示
+    function getMessageInfo(id) {
+        $.ajax({
+            url: "/admin/getMessageById/" + id,
+            type: "GET",
+            success: function (result) {
+                var message = result.extend.message;
+                //显示数据之前先清除一下校验样式，如果有的话
+                reset_form("#UpdateModal form");
+
+                $("#qNumber_update_input").val(message.qqNumber);
+                $("#qName_update_input").val(message.qqName);
+                $("#gameName_update_input").val(message.gameName);
+                $("#message_update_input").val(message.message);
+                if (message.submitMethod === 1) {
+                    $("#submitMethod_update_input1").prop("checked", true);
+                    $("#submitMethod_update_input2").prop("checked", false);
+                } else if (message.submitMethod === 2) {
+                    $("#submitMethod_update_input1").prop("checked", false);
+                    $("#submitMethod_update_input2").prop("checked", true);
+                }
+                if (message.exhibition === 0) {
+                    $("#exhibition_update_input1").prop("checked", true);
+                    $("#exhibition_update_input2").prop("checked", false);
+                } else if (message.exhibition === 1) {
+                    $("#exhibition_update_input1").prop("checked", false);
+                    $("#exhibition_update_input2").prop("checked", true);
+                }
+            }
+        });
+    }
+
+    //点击更新，更新信息
+    $("#message_update_btn").click(function () {
+        //清空表单样式
+        clean_form("#UpdateModal form");
+
+        var qqNumber = $("#qNumber_update_input").val();
+        var qqName = $("#qName_update_input").val();
+        var gameName = $("#gameName_update_input").val();
+        var message = $("#message_update_input").val();
+
+        let qqNumberRegex = /^[1-9]\d{3,11}$/;
+        if (qqNumber.length === 0) {
+            show_validate_msg("#qNumber_add_input", "error", "QQ号码为空");
+            return false;
+        } else if (qqNumberRegex.test(qqNumber) === false) {
+            show_validate_msg("#qNumber_add_input", "error", "输入QQ号码不合法");
+            return false;
+        }
+
+        let qqNameRegex = /^.{1,20}$/;
+        if (qqName.length === 0) {
+            show_validate_msg("#qName_update_input", "error", "QQ名称为空");
+            return false;
+        } else if (qqNameRegex.test(qqName) === false) {
+            show_validate_msg("#qName_update_input", "error", "QQ名称不合法");
+            return false;
+        }
+
+        //匹配汉字(真实姓名)
+        let gameNameRegex = /^\w{1,20}$/;
+        if (gameName.length === 0) {
+            show_validate_msg("#gameName_update_input", "error", "游戏名称为空");
+            return false;
+        } else if (gameNameRegex.test(gameName) === false) {
+            show_validate_msg("#gameName_update_input", "error", "游戏名称不合法（只能由数字、英文和下划线组成）");
+            return false;
+        }
+
+        let messageRegex = /^.{0,200}$/;
+        if (message.length !== 0) {
+            if (messageRegex.test(message) === false) {
+                show_validate_msg("#message_update_input", "error", "留言不合法（长度不超过200个字符）");
+                return false;
+            }
+        }
+
+        var id =$(this).attr("update-id");
+        $.ajax({
+            url: "/admin/updateMessageProfile/" + id ,
+            type: "PUT",
+            data: $("#UpdateModal form").serialize(),
+            success: function (result) {
+                if (result.code === 100) {
+                    $("#UpdateModal").modal('hide');
+                    $.alert('留言信息修改成功！');
+                    setTimeout(function () {
+                        var pageNum = [[${authmePageInfo.pageNum}]];
+                        var pageSize = [[${authmePageInfo.pageSize}]];
+                        location.href = "/admin/data/toLoginData.html?pageNum=" + pageNum + "&pageSize=" + pageSize;
+                    }, 1000);
+                } else {
+                    $.alert('留言信息修改失败！');
+                }
+            }
+        });
+    });
+
+    //单个删除
+    $(document).on("click", ".delete_btn", function () {
+        //1、弹出是否确认删除对话框
+        var id = $(this).attr("delete-id");
+        var gameName = $(this).attr("delete-name");
+        $.alert({
+            title: '提示：',
+            content: "确定删除玩家 <strong>" + gameName + "</strong> 的留言吗？",
+            buttons: {
+                confirm: {
+                    text: '确认',
+                    btnClass: 'btn-primary',
+                    action: function () {
+                        $.ajax({
+                            url: "/admin/deleteMessageById/" + id,
+                            type: "DELETE",
+                            success: function (result) {
+                                if (result.code === 100) {
+                                    $.alert('删除该留言成功！');
+                                    setTimeout(function () {
+                                        var pageNum = [[${authmePageInfo.pageNum}]];
+                                        var pageSize = [[${authmePageInfo.pageSize}]];
+                                        location.href = "/admin/data/toLoginData.html?pageNum=" + pageNum + "&pageSize=" + pageSize;
+                                    }, 1000);
+                                } else {
+                                    $.alert('删除该留言失败!');
+                                }
+                            }
+                        });
+                    }
+                },
+                cancel: {
+                    text: '取消',
+                    action: function () {
+                        $.alert('已取消!');
+                    }
+                }
+            }
+        });
+
+    });
+
+    //清空表单样式及内容
+    function reset_form(ele) {
+        $(ele)[0].reset();
+        //清空表单样式
+        $(ele).find("*").removeClass("has-error has-success");
+        $(ele).find(".help-block").text("");
+    }
+
+    //清空表单样式
+    function clean_form(ele) {
+        //清空表单样式
+        $(ele).find("*").removeClass("has-error has-success");
+        $(ele).find(".help-block").text("");
+    }
+
+    //显示校验结果的提示信息
+    function show_validate_msg(ele, status, msg) {
+        //清除当前元素的校验状态
+        $(ele).parent().removeClass("has-success has-error");
+        $(ele).next("span").text("");
+        if ("success" === status) {
+            $(ele).parent().addClass("has-success");
+            $(ele).next("span").text(msg);
+        } else if ("error" === status) {
+            $(ele).parent().addClass("has-error");
+            $(ele).next("span").text(msg);
+        }
+    }
+
+</script>
+</body>
+</html>

@@ -1,7 +1,7 @@
 package com.chasexi.controller;
 
-import com.chasexi.entity.LeaveMessage;
-import com.chasexi.service.MessageService;
+import com.chasexi.entity.*;
+import com.chasexi.service.impl.MainServiceImpl;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,7 +26,7 @@ import java.util.List;
 public class MainController {
 
     @Autowired
-    private MessageService messageService;
+    private MainServiceImpl mainService;
 
     @RequestMapping("/index.html")
     public String index(Model model,@RequestParam(value = "pageNum", defaultValue = "1")int pageNum,
@@ -39,7 +39,7 @@ public class MainController {
     @RequestMapping("/message/toMessage_All.html")
     public String Message_All(Model model,@RequestParam(value = "pageNum", defaultValue = "1")int pageNum,
                         @RequestParam(value = "pageSize", defaultValue = "10")int pageSize) {
-        List<LeaveMessage> messageList = messageService.selectMessageAll(pageNum,pageSize);
+        List<LeaveMessage> messageList = mainService.selectMessageAll(pageNum,pageSize);
         //分页
         PageInfo<LeaveMessage> messagePageInfo = new PageInfo<>(messageList);
         model.addAttribute("messagePageInfo",messagePageInfo);
@@ -52,7 +52,7 @@ public class MainController {
     @RequestMapping("/message/toMessage_Show.html")
     public String Message_Show(Model model,@RequestParam(value = "pageNum", defaultValue = "1")int pageNum,
                               @RequestParam(value = "pageSize", defaultValue = "10")int pageSize) {
-        List<LeaveMessage> messageList = messageService.selectMessageShow(pageNum,pageSize);
+        List<LeaveMessage> messageList = mainService.selectMessageShow(pageNum,pageSize);
         //分页
         PageInfo<LeaveMessage> messagePageInfo = new PageInfo<>(messageList);
         model.addAttribute("messagePageInfo",messagePageInfo);
@@ -65,7 +65,7 @@ public class MainController {
     @RequestMapping("/message/toMessage_NotShow.html")
     public String Message_NotShow(Model model,@RequestParam(value = "pageNum", defaultValue = "1")int pageNum,
                               @RequestParam(value = "pageSize", defaultValue = "10")int pageSize) {
-        List<LeaveMessage> messageList = messageService.selectMessageNotShow(pageNum,pageSize);
+        List<LeaveMessage> messageList = mainService.selectMessageNotShow(pageNum,pageSize);
         //分页
         PageInfo<LeaveMessage> messagePageInfo = new PageInfo<>(messageList);
         model.addAttribute("messagePageInfo",messagePageInfo);
@@ -74,5 +74,91 @@ public class MainController {
         model.addAttribute("activeUrl1","message_Active");
         model.addAttribute("activeUrl2","message_NotShow_Active");
         return "admin/message/messageNotShow";
+    }
+
+    // ---------------------------------------------------
+
+    @RequestMapping("/data/toLoginData.html")
+    public String LoginData(Model model,@RequestParam(value = "pageNum", defaultValue = "1")int pageNum,
+                                  @RequestParam(value = "pageSize", defaultValue = "10")int pageSize) {
+        List<Authme> authmeList = mainService.selectAuthmeAll(pageNum,pageSize);
+        //分页
+        PageInfo<Authme> authmePageInfo = new PageInfo<>(authmeList);
+        model.addAttribute("authmePageInfo",authmePageInfo);
+        model.addAttribute("authmeList",authmeList);
+        model.addAttribute("pageTopBarInfo","登录数据");
+        model.addAttribute("activeUrl1","playerDataActive");
+        model.addAttribute("activeUrl2","loginDataActive");
+        return "admin/data/loginData";
+    }
+    @RequestMapping("/data/toUltraSetHomeData/homes.html")
+    public String UltraSetHomeHomesData(Model model,@RequestParam(value = "pageNum", defaultValue = "1")int pageNum,
+                                  @RequestParam(value = "pageSize", defaultValue = "10")int pageSize) {
+        List<UlTraSetHomeHomes> UlTraSetHomeHomesList = mainService.selectUlTraSetHomeHomesAll(pageNum,pageSize);
+        //分页
+        PageInfo<UlTraSetHomeHomes> UlTraSetHomeHomesPageInfo = new PageInfo<>(UlTraSetHomeHomesList);
+        model.addAttribute("UlTraSetHomeHomesPageInfo",UlTraSetHomeHomesPageInfo);
+        model.addAttribute("UlTraSetHomeHomesList",UlTraSetHomeHomesList);
+        model.addAttribute("pageTopBarInfo","UltraSerHome-homes数据");
+        model.addAttribute("activeUrl1","playerDataActive");
+        model.addAttribute("activeUrl2","UltraSetHomeDataActive");
+        model.addAttribute("activeUrl3","homesDataActive");
+        return "admin/data/ultraSetHomeHomesData";
+    }
+    @RequestMapping("/data/toUltraSetHomeData/pending.html")
+    public String UltraSetHomePendingData(Model model,@RequestParam(value = "pageNum", defaultValue = "1")int pageNum,
+                                        @RequestParam(value = "pageSize", defaultValue = "10")int pageSize) {
+        List<UlTraSetHomePending> UlTraSetHomePendingList = mainService.selectUlTraSetHomePendingAll(pageNum,pageSize);
+        //分页
+        PageInfo<UlTraSetHomePending> UlTraSetHomePendingPageInfo = new PageInfo<>(UlTraSetHomePendingList);
+        model.addAttribute("UlTraSetHomePendingPageInfo",UlTraSetHomePendingPageInfo);
+        model.addAttribute("UlTraSetHomePendingList",UlTraSetHomePendingList);
+        model.addAttribute("pageTopBarInfo","UltraSerHome-pending数据");
+        model.addAttribute("activeUrl1","playerDataActive");
+        model.addAttribute("activeUrl2","UltraSetHomeDataActive");
+        model.addAttribute("activeUrl3","pendingDataActive");
+        return "admin/data/ultraSetHomePendingData";
+    }
+    @RequestMapping("/data/toUltraSetHomeData/players.html")
+    public String UltraSetHomePlayersData(Model model,@RequestParam(value = "pageNum", defaultValue = "1")int pageNum,
+                                        @RequestParam(value = "pageSize", defaultValue = "10")int pageSize) {
+        List<UlTraSetHomePlayers> UltraSetHomePlayersList = mainService.selectUlTraSetHomePlayersAll(pageNum,pageSize);
+        //分页
+        PageInfo<UlTraSetHomePlayers> UltraSetHomePlayersPageInfo = new PageInfo<>(UltraSetHomePlayersList);
+        model.addAttribute("UltraSetHomePlayersPageInfo",UltraSetHomePlayersPageInfo);
+        model.addAttribute("UltraSetHomePlayersList",UltraSetHomePlayersList);
+        model.addAttribute("pageTopBarInfo","UltraSerHome-homes数据");
+        model.addAttribute("activeUrl1","playerDataActive");
+        model.addAttribute("activeUrl2","UltraSetHomeDataActive");
+        model.addAttribute("activeUrl3","playersDataActive");
+        return "admin/data/ultraSetHomePlayersData";
+    }
+    @RequestMapping("/data/toAdvancedBanData/history.html")
+    public String AdvancedBanData_history(Model model,@RequestParam(value = "pageNum", defaultValue = "1")int pageNum,
+                                  @RequestParam(value = "pageSize", defaultValue = "10")int pageSize) {
+        List<PunIsHmEnTs> PunIsHmEnTs_historyList = mainService.selectPunIsHmEnTs_historyAll(pageNum,pageSize);
+        //分页
+        PageInfo<PunIsHmEnTs> PunIsHmEnTs_historyPageInfo = new PageInfo<>(PunIsHmEnTs_historyList);
+        model.addAttribute("PunIsHmEnTs_historyPageInfo",PunIsHmEnTs_historyPageInfo);
+        model.addAttribute("PunIsHmEnTs_historyList",PunIsHmEnTs_historyList);
+        model.addAttribute("pageTopBarInfo","AdvancedBan数据-历史");
+        model.addAttribute("activeUrl1","playerDataActive");
+        model.addAttribute("activeUrl2","advancedBanDataActive");
+        model.addAttribute("activeUrl3","historyDataActive");
+        return "admin/data/advancedBanData_history";
+    }
+    @RequestMapping("/data/toAdvancedBanData/realTime.html")
+    public String AdvancedBanData_realTime(Model model,@RequestParam(value = "pageNum", defaultValue = "1")int pageNum,
+                                          @RequestParam(value = "pageSize", defaultValue = "10")int pageSize) {
+        List<PunIsHmEnTs> PunIsHmEnTs_realTimeList = mainService.selectPunIsHmEnTs_historyAll(pageNum,pageSize);
+        //分页
+        PageInfo<PunIsHmEnTs> PunIsHmEnTs_realTimePageInfo = new PageInfo<>(PunIsHmEnTs_realTimeList);
+        model.addAttribute("PunIsHmEnTs_realTimePageInfo",PunIsHmEnTs_realTimePageInfo);
+        model.addAttribute("PunIsHmEnTs_realTimeList",PunIsHmEnTs_realTimeList);
+        model.addAttribute("pageTopBarInfo","AdvancedBan数据-实时");
+        model.addAttribute("activeUrl1","playerDataActive");
+        model.addAttribute("activeUrl2","advancedBanDataActive");
+        model.addAttribute("activeUrl3","realTimeDataActive");
+        return "admin/data/advancedBanData_realTime";
     }
 }
