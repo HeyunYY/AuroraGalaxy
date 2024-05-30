@@ -137,49 +137,49 @@
     });
 
     // 定义要预加载的图片资源数组
-    var imageUrls = [
-        '/img/portfolio/img-1-compress.webp',
-        '/img/portfolio/img-2-compress.webp',
-        '/img/portfolio/img-3-compress.webp',
-        '/img/portfolio/img-4-compress.webp',
-        '/img/portfolio/img-5-compress.webp',
-        '/img/portfolio/img-6-compress.webp',
-        '/img/portfolio/img-7-compress.webp',
-        '/img/portfolio/img-8-compress.webp',
-        '/img/portfolio/img-9-compress.webp',
-        // 添加更多图片资源链接
-    ];
-
-    // 异步加载单个图片资源
-    function loadImageAsync(url) {
-        return new Promise(function(resolve, reject) {
-            var img = new Image();
-            img.onload = function() {
-                resolve(img);
-            };
-            img.onerror = function() {
-                reject(new Error('Failed to load image: ' + url));
-            };
-            img.src = url;
-        });
-    }
-
-    // 并行加载多个图片资源，并在所有图片加载完成后执行回调函数
-    async function preloadImages(imageUrls) {
-        var promises = imageUrls.map(loadImageAsync);
-        try {
-            return await Promise.all(promises);
-        } catch (error) {
-            console.error('Error loading images:', error);
-        }
-    }
-
-    // 调用 preloadImages 函数加载并缓存图片资源
-    (async function() {
-        await preloadImages(imageUrls);
-        console.log('All images loaded successfully');
-        // 所有图片加载完成后的操作，例如显示图片等
-    })();
+    // var imageUrls = [
+    //     '/img/portfolio/img-1-compress.webp',
+    //     '/img/portfolio/img-2-compress.webp',
+    //     '/img/portfolio/img-3-compress.webp',
+    //     '/img/portfolio/img-4-compress.webp',
+    //     '/img/portfolio/img-5-compress.webp',
+    //     '/img/portfolio/img-6-compress.webp',
+    //     '/img/portfolio/img-7-compress.webp',
+    //     '/img/portfolio/img-8-compress.webp',
+    //     '/img/portfolio/img-9-compress.webp',
+    //     // 添加更多图片资源链接
+    // ];
+    //
+    // // 异步加载单个图片资源
+    // function loadImageAsync(url) {
+    //     return new Promise(function(resolve, reject) {
+    //         var img = new Image();
+    //         img.onload = function() {
+    //             resolve(img);
+    //         };
+    //         img.onerror = function() {
+    //             reject(new Error('Failed to load image: ' + url));
+    //         };
+    //         img.src = url;
+    //     });
+    // }
+    //
+    // // 并行加载多个图片资源，并在所有图片加载完成后执行回调函数
+    // async function preloadImages(imageUrls) {
+    //     var promises = imageUrls.map(loadImageAsync);
+    //     try {
+    //         return await Promise.all(promises);
+    //     } catch (error) {
+    //         console.error('Error loading images:', error);
+    //     }
+    // }
+    //
+    // // 调用 preloadImages 函数加载并缓存图片资源
+    // (async function() {
+    //     await preloadImages(imageUrls);
+    //     console.log('All images loaded successfully');
+    //     // 所有图片加载完成后的操作，例如显示图片等
+    // })();
 
 </script>
 </html>

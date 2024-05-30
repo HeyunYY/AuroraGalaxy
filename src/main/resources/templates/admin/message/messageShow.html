@@ -332,7 +332,7 @@
             return false;
         }
 
-        let qqNameRegex = /^[\u4E00-\u9FA5A-Za-z0-9_]{1,20}$/;
+        let qqNameRegex = /^.{1,20}$/;
         if (qqName.length === 0) {
             show_validate_msg("#qName_update_input", "error", "QQ名称为空");
             return false;
