@@ -14,6 +14,32 @@
     <!--自定义样式-->
     <link href="../admin/lyear/css/style.min.css" th:href="@{/admin/lyear/css/style.min.css}" rel="stylesheet" type="text/css"/>
 
+    <style>
+        /* 设置输入框宽度为100% */
+        input[type="text"] {
+            width: 50%;
+            border: none; /* 删除输入框的边框 */
+            border-bottom: 1px solid #000; /* 只保留下方的边框 */
+            outline: none; /* 删除输入框的轮廓线 */
+        }
+        /* 设置按钮样式 */
+        button {
+            border: none; /* 删除按钮的边框 */
+            background-color: #52d3c7; /* 设置背景色为绿色 */
+            color: white; /* 设置文字颜色为白色 */
+            width: 80px; /* 设置按钮宽度为100px */
+            padding: 3px 5px 3px 5px; /* 设置内边距 */
+            cursor: pointer; /* 设置鼠标样式为手型 */
+            border-radius: 3px; /* 设置按钮圆角为1px */
+        }
+        #love{
+            font-size: 20px;
+            color: skyblue;
+        }
+        #check_key_result{
+            font-size: 14px;
+        }
+    </style>
 </head>
 <body>
 <div class="lyear-layout-web">
@@ -35,12 +61,22 @@
                         </div>
                         <div class="card">
                             <div class="card-header">
-                                <h4>感谢使用本系统，已获取您的登录ip地址并上报服务器，权限认证通过</h4>
+                                <h4>感谢使用本系统，权限认证通过，已获取您的登录ip地址并上报服务器</h4>
+                            </div>
+                            <div class="card-header">
+                                <h4>请使用侧边栏选项进行各项数据操作，数据修改无法恢复，请谨慎操作！</h4>
                             </div>
                         </div>
                         <div class="card">
                             <div class="card-header">
-                                <h4>请使用侧边栏选项进行各项数据操作，数据修改无法恢复，请谨慎操作！</h4>
+                                <h4>为保证游戏服务器数据安全，如需访问玩家数据，请输入密钥来验证你的身份</h4>
+                            </div>
+                            <div class="card-header" id="key_input">
+                                <h4>密钥：<input type="text" id="key" name="key" placeholder="请输入密钥" /></h4>
+                            </div>
+                            <div class="card-header">
+                                <h4><button onclick="check_key()" id="check_key">验证</button>
+                                    <i id="check_key_result" th:text="${session.checkKey_error}"></i></h4>
                             </div>
                         </div>
                         <div class="card">
@@ -49,6 +85,11 @@
                             </div>
                             <div class="card-header">
                                 <h4>当日新增留言：-未知-</h4>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>每日一句：<i id="love"></i></h4>
                             </div>
                         </div>
                     </div>
@@ -69,7 +110,70 @@
 <script th:src="@{/admin/lyear/jconfirm/jquery-confirm.min.js}"></script>
 <!--自定义js脚本-->
 <script th:src="@{/admin/lyear/js/main.min.js}"></script>
-<script type="text/javascript">
+
+<script type="text/javascript" >
+    $(function () {
+        $.getJSON('https://api.vvhan.com/api/text/love?type=json', function(data){
+            $("#love").text(data.data.content);
+        });
+    });
+    $(function () {
+        let check_key_result = $("#check_key_result");
+        if (check_key_result.text() === "密钥验证失败或密钥已经过期！"){
+            check_key_result.css("color", "red")
+        }
+        if(check_key_result.text() === "密钥验证通过，已允许数据访问"){
+            check_key_result.css("color", "green");
+            $("#key_input").remove();
+            $("#check_key").remove();
+        }
+    });
+
+    function check_key() {
+        let check_key_result = $("#check_key_result")
+        let key = $("#key");
+        let key_a = key.val();
+        check_key_result.text("");
+        const keyRegex = /^[a-zA-Z0-9]{30}$/;
+        if (!key_a.match(keyRegex)) {
+            check_key_result.text("密钥格式错误! （密钥由30位大小写的英文字母和数字组成）").css("color", "red");
+            key.val("");
+            return false;
+        }
+        $.ajax({
+            type: "POST",
+            url: "/admin/checkKey",
+            data: {
+                key: key.val()
+            },
+            success: function (data) {
+                if (data.code === 100) {
+                    key.val("");
+                    $("#key_input").remove();
+                    $("#check_key").remove();
+                    check_key_result.text("密钥验证通过，已允许数据访问").css("color", "green");
+                } else {
+                    check_key_result.text("密钥错误！").css("color", "red");
+                    key.val("");
+                }
+            }
+        })
+    }
+
+    function getUserOsInfo() {
+        const userAgent = navigator.userAgent;
+        if (userAgent.indexOf("Windows NT 10.0") !== -1) return "Windows";
+        if (userAgent.indexOf("Windows NT 6.2") !== -1) return "Windows";
+        if (userAgent.indexOf("Windows NT 6.1") !== -1) return "Windows";
+        if (userAgent.indexOf("Windows NT 6.0") !== -1) return "Windows";
+        if (userAgent.indexOf("Windows NT 5.1") !== -1) return "Windows";
+        if (userAgent.indexOf("Windows NT 5.0") !== -1) return "Windows";
+        if (userAgent.indexOf("Mac") !== -1) return "Mac/iOS";
+        if (userAgent.indexOf("X11") !== -1) return "UNIX";
+        if (userAgent.indexOf("Linux") !== -1) return "Linux";
+        return "Other";
+    }
+
 </script>
 </body>
 </html>

@@ -4,11 +4,10 @@ import com.chasexi.service.MessageService;
 import com.chasexi.utils.JsonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -41,6 +40,22 @@ public class AdminController {
     @RequestMapping("/logout")
     public String logout(HttpSession session){
         session.removeAttribute("username");
+        session.removeAttribute("checkKey");
+        session.removeAttribute("checkKey_error");
+//        session.invalidate(); // 销毁session
         return "index";
+    }
+
+
+    @RequestMapping("/checkKey")
+    @ResponseBody
+    public JsonUtils checkKey(@RequestParam("key")String key, HttpSession session){
+        if (key.equals("W7rpG2s13ADfhO8T6YIR9zXmKpLCq0")){
+            session.setAttribute("checkKey","true");
+            session.setAttribute("checkKey_error", "密钥验证通过，已允许数据访问");
+            return JsonUtils.success();
+        }else {
+            return JsonUtils.fail();
+        }
     }
 }

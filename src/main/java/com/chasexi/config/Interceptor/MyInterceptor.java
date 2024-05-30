@@ -1,5 +1,6 @@
 package com.chasexi.config.Interceptor;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -24,7 +25,6 @@ public class MyInterceptor implements HandlerInterceptor {
             throws Exception {
         String requestURI = request.getRequestURI();
         HttpSession session = request.getSession();
-//        System.out.println("拦截器拦截到请求：" + requestURI);
         if (isResourceFile(removeJSessionID(requestURI))) {
             // 是资源文件，直接放行
 //            System.out.println("发现资源请求：[" + requestURI + "] - 处理方式：放行");
@@ -33,19 +33,6 @@ public class MyInterceptor implements HandlerInterceptor {
         if (requestURI.equals("/disclaimers_privacy.html")){
 //            System.out.println("发现请求：[" + requestURI + "] - 处理方式：放行");
             return true;
-        }
-        if (requestURI.contains("/admin")) {
-            if(requestURI.equals("/admin/verifyLogin")){
-//                System.out.println("发现登录请求：[" + requestURI + "] - 处理方式：放行");
-                return true;
-            }
-            if (session.getAttribute("username") != null) {
-//                System.out.println("发现请求：[" + requestURI + "] - 处理方式：放行");
-                return true;
-            }
-//            System.err.println("发现请求：[" + requestURI + "] - 处理方式：拦截");
-            response.sendRedirect("/index.html");
-            return false;
         }
         if (requestURI.equals("/error")){
             return true;
@@ -74,7 +61,32 @@ public class MyInterceptor implements HandlerInterceptor {
             response.sendRedirect("/Not_disclaimers");
             return false;
         }
-//        System.out.println("发现请求：[" + requestURI + "] - 处理方式：放行");
+
+        if (requestURI.contains("/admin")) {
+            if(requestURI.equals("/admin/verifyLogin")){
+                return true;
+            }
+            if(requestURI.equals("/admin/logout")){
+                return true;
+            }
+            if (session.getAttribute("username") != null) {
+                if(requestURI.contains("/admin/data")){
+                    String checkKeyValue = (String)session.getAttribute("checkKey");
+                    if (checkKeyValue != null && checkKeyValue.equals("true")) {
+                        session.setAttribute("checkKey_error", "");
+                        return true;
+                    }else {
+                        session.setAttribute("checkKey_error", "密钥验证失败或密钥已经过期！");
+                        response.sendRedirect("/admin/index.html");
+                        return false;
+                    }
+                }
+                return true;
+            }
+            response.sendRedirect("/index.html");
+            return false;
+        }
+
         return true; // 允许请求通过
     }
 
