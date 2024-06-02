@@ -112,29 +112,29 @@
         <p>感谢您阅读本免责声明，并祝您在本网站上有愉快的体验！</p>
         <p>最后更新日期：2024年3月25日</p>
     </div>
-    <br>
-    <span style="color: red;" id="span_message" th:text="${session.disclaimers_message}"></span>
-    <button id="form-button" type="button" class="submit-true">我已阅读并同意上述免责声明 - 访问网站</button>
+<!--    <br>-->
+<!--    <span style="color: red;" id="span_message" th:text="${session.disclaimers_message}"></span>-->
+<!--    <button id="form-button" type="button" class="submit-true">我已阅读并同意上述免责声明 - 访问网站</button>-->
 </div>
 </body>
 
 <script th:src="@{/js/jquery.js}"></script>
 <script>
-    $('#form-button').click(function () {
-        let disclaimers_state = "true";
-        $.ajax({
-            url: "disclaimers_finish",
-            type: "POST",
-            data: {
-                "disclaimers_state": disclaimers_state
-            },
-            success: function (data) {
-                if (data === "true"){
-                    location.href = "index.html";
-                }
-            }
-        });
-    });
+    // $('#form-button').click(function () {
+    //     let disclaimers_state = "true";
+    //     $.ajax({
+    //         url: "disclaimers_finish",
+    //         type: "POST",
+    //         data: {
+    //             "disclaimers_state": disclaimers_state
+    //         },
+    //         success: function (data) {
+    //             if (data === "true"){
+    //                 location.href = "index.html";
+    //             }
+    //         }
+    //     });
+    // });
 
     // 定义要预加载的图片资源数组
     // var imageUrls = [

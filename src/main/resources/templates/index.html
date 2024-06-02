@@ -37,7 +37,7 @@
 <header id="header-wrap">
     <!-- 头部 -->
     <nav class="navbar navbar-expand-md bg-inverse fixed-top scrolling-navbar">
-        <div class="container" style="max-width : 1200px">
+        <div class="container" style="max-width : 1300px">
             <!-- 网站头部LOGO -->
             <a href="#" class="navbar-brand"><img th:src="@{img/Aurora_logo.png}" alt="极光星系（Aurora Galaxy）我的世界java版服务器"></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,6 +45,11 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav mr-auto w-100 justify-content-end clearfix">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="disclaimers.html" target="_blank">
+                            -免责声明-
+                        </a>
+                    </li>
                     <li class="nav-item active">
                         <a class="nav-link" href="#hero-area">
                             主页
@@ -917,13 +922,6 @@
 <script th:src="@{/js/form-validator.min.js}"></script>
 <script th:src="@{/js/contact-foem-script.js}"></script>
 <script>
-    $(function (){
-        let disclaimers_state = $("#disclaimers_state").text();
-        if (disclaimers_state === null || disclaimers_state === "" || disclaimers_state !== "true"){
-            location.href = "Not_disclaimers";
-        }
-    })
-
     //当页面加载完成时，给每一个class为http_img的src属性结尾添加时间戳
     // $(function () {
     //     $(".http_img").each(function () {

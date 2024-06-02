@@ -1,5 +1,7 @@
 package com.chasexi.controller;
 
+import com.chasexi.entity.AdminAccount;
+import com.chasexi.service.AdminAccountService;
 import com.chasexi.service.MessageService;
 import com.chasexi.utils.JsonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,16 +26,24 @@ import javax.servlet.http.HttpSession;
 public class AdminController {
     @Autowired
     private MessageService messageService;
+    @Autowired
+    private AdminAccountService adminAccountService;
 
     @RequestMapping("/verifyLogin")
     @ResponseBody
-    public JsonUtils verifyLogin(@RequestParam("username")String username, @RequestParam("password")String password,
+    public JsonUtils verifyLogin(@RequestParam("loginName")String loginName, @RequestParam("password")String password,
                                  HttpSession session){
-        if (username.equals("admin")&&password.equals("admin")){
-            session.setAttribute("username","通用管理员");
+        AdminAccount adminAccount = adminAccountService.SelectAdminAccountByLogin(loginName,password);
+        if (adminAccount != null){
+            if(adminAccount.getEnable() != 1){
+                return JsonUtils.fail().add("error","很抱歉，您的账户处于禁用或冻结状态，请重试");
+            }
+            // 在登录时创建Session并存储用户信息
+            session.setAttribute("userId", adminAccount.getUid());
+            session.setAttribute("username",adminAccount.getShowName());
             return JsonUtils.success().add("url","/admin/index.html");
         }else {
-            return JsonUtils.fail();
+            return JsonUtils.fail().add("error","很抱歉，您提供的凭证无法确认您的身份");
         }
     }
 

@@ -49,18 +49,18 @@ public class MyInterceptor implements HandlerInterceptor {
             return true;
         }
 
-        //增加对disclaimers_state属性的非空检查
-        String state = (String) session.getAttribute("disclaimers_state");
-        if (state == null || state.isEmpty()) {
-//            System.err.println("发现请求：[" + requestURI + "] - 处理方式：拦截");
-            response.sendRedirect("/Not_disclaimers");
-            return false;
-        }
-        if (!("true").equals(state)) {
-//            System.err.println("发现请求：[" + requestURI + "] - 处理方式：拦截");
-            response.sendRedirect("/Not_disclaimers");
-            return false;
-        }
+//        //增加对disclaimers_state属性的非空检查
+//        String state = (String) session.getAttribute("disclaimers_state");
+//        if (state == null || state.isEmpty()) {
+////            System.err.println("发现请求：[" + requestURI + "] - 处理方式：拦截");
+//            response.sendRedirect("/Not_disclaimers");
+//            return false;
+//        }
+//        if (!("true").equals(state)) {
+////            System.err.println("发现请求：[" + requestURI + "] - 处理方式：拦截");
+//            response.sendRedirect("/Not_disclaimers");
+//            return false;
+//        }
 
         if (requestURI.contains("/admin")) {
             if(requestURI.equals("/admin/verifyLogin")){

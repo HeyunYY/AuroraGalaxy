@@ -43,7 +43,7 @@ public class IndexController {
         return "login";
     }
 
-    @RequestMapping("/disclaimers")
+    @RequestMapping("/disclaimers.html")
     public String disclaimers() {
         return "disclaimers";
     }
@@ -54,25 +54,25 @@ public class IndexController {
         return "index";
     }
 
-    @ResponseBody
-    @PostMapping("/disclaimers_finish")
-    public String disclaimers_finish(@RequestParam("disclaimers_state")String disclaimers_state, HttpSession session) {
-        session.setAttribute("disclaimers_state", disclaimers_state);
-        session.setAttribute("disclaimers_message", "");
-        return "true";
-    }
+//    @ResponseBody
+//    @PostMapping("/disclaimers_finish")
+//    public String disclaimers_finish(@RequestParam("disclaimers_state")String disclaimers_state, HttpSession session) {
+//        session.setAttribute("disclaimers_state", disclaimers_state);
+//        session.setAttribute("disclaimers_message", "");
+//        return "true";
+//    }
 
     @GetMapping("/disclaimers_privacy.html")
     public String disclaimers_privacy() {
         return "disclaimers_privacy";
     }
 
-    @RequestMapping("/Not_disclaimers")
-    public String Not_disclaimers(HttpSession session) {
-        session.setAttribute("disclaimers_state",null);
-        session.setAttribute("disclaimers_message", "您未同意免责声明或出现不可预估的错误，本次访问已被拦截！");
-        return "disclaimers";
-    }
+//    @RequestMapping("/Not_disclaimers")
+//    public String Not_disclaimers(HttpSession session) {
+//        session.setAttribute("disclaimers_state",null);
+//        session.setAttribute("disclaimers_message", "您未同意免责声明或出现不可预估的错误，本次访问已被拦截！");
+//        return "disclaimers";
+//    }
 
 //    提交留言
     @ResponseBody
