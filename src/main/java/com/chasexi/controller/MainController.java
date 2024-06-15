@@ -2,14 +2,21 @@ package com.chasexi.controller;
 
 import com.chasexi.entity.*;
 import com.chasexi.service.impl.MainServiceImpl;
+import com.chasexi.utils.JsonUtils;
 import com.github.pagehelper.PageInfo;
+import org.apache.shiro.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpSession;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.time.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -34,6 +41,20 @@ public class MainController {
         model.addAttribute("pageTopBarInfo","系统首页");
         model.addAttribute("activeUrl","indexActive");
         return "admin/main";
+    }
+
+    @RequestMapping("/dataPanelLink.html")
+    @ResponseBody
+    public JsonUtils dataPanelLink(Model model, HttpSession session) {
+        String checkKeyValue = (String)session.getAttribute("checkKey");
+        model.addAttribute("activeUrl","DataActive");
+        if (checkKeyValue != null && checkKeyValue.equals("true")) {
+            session.setAttribute("checkKey_error", "");
+            return JsonUtils.success().add("dataPanelLinkUrl","http://f.rainplay.cn:52728");
+        }else {
+            session.setAttribute("checkKey_error", "密钥验证失败或密钥已经过期！");
+            return JsonUtils.fail();
+        }
     }
 
     @RequestMapping("/message/toMessage_All.html")
@@ -81,7 +102,23 @@ public class MainController {
     @RequestMapping("/data/toLoginData.html")
     public String LoginData(Model model,@RequestParam(value = "pageNum", defaultValue = "1")int pageNum,
                                   @RequestParam(value = "pageSize", defaultValue = "10")int pageSize) {
-        List<Authme> authmeList = mainService.selectAuthmeAll(pageNum,pageSize);
+        List<Authme> authmeList = mainService.SelectAuthme_homepage(pageNum,pageSize);
+        for (Authme authme : authmeList) {
+            long lastLogin = authme.getLastlogin();
+            long regDate = authme.getRegdate();
+            Instant _lastLogin = Instant.ofEpochMilli(lastLogin);
+            Instant _regDate = Instant.ofEpochMilli(regDate);
+
+            // 转换为LocalDateTime对象
+            LocalDateTime __lastLogin = LocalDateTime.ofInstant(_lastLogin, ZoneId.systemDefault());
+            LocalDateTime __regDate = LocalDateTime.ofInstant(_regDate, ZoneId.systemDefault());
+
+            // 格式化日期时间
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            authme.setLastlogin_time(__lastLogin.format(formatter));
+            authme.setRegdate_time(__regDate.format(formatter));
+        }
+
         //分页
         PageInfo<Authme> authmePageInfo = new PageInfo<>(authmeList);
         model.addAttribute("authmePageInfo",authmePageInfo);
@@ -141,24 +178,22 @@ public class MainController {
         PageInfo<PunIsHmEnTs> PunIsHmEnTs_historyPageInfo = new PageInfo<>(PunIsHmEnTs_historyList);
         model.addAttribute("PunIsHmEnTs_historyPageInfo",PunIsHmEnTs_historyPageInfo);
         model.addAttribute("PunIsHmEnTs_historyList",PunIsHmEnTs_historyList);
-        model.addAttribute("pageTopBarInfo","AdvancedBan数据-历史");
-        model.addAttribute("activeUrl1","playerDataActive");
-        model.addAttribute("activeUrl2","advancedBanDataActive");
-        model.addAttribute("activeUrl3","historyDataActive");
+        model.addAttribute("pageTopBarInfo","历史数据（已经解除封禁 或 警告）");
+        model.addAttribute("activeUrl1","advancedBanDataActive");
+        model.addAttribute("activeUrl2","historyDataActive");
         return "admin/data/advancedBanData_history";
     }
     @RequestMapping("/data/toAdvancedBanData/realTime.html")
     public String AdvancedBanData_realTime(Model model,@RequestParam(value = "pageNum", defaultValue = "1")int pageNum,
                                           @RequestParam(value = "pageSize", defaultValue = "10")int pageSize) {
-        List<PunIsHmEnTs> PunIsHmEnTs_realTimeList = mainService.selectPunIsHmEnTs_historyAll(pageNum,pageSize);
+        List<PunIsHmEnTs> PunIsHmEnTs_realTimeList = mainService.selectPunIsHmEnTs_realTimeAll(pageNum,pageSize);
         //分页
         PageInfo<PunIsHmEnTs> PunIsHmEnTs_realTimePageInfo = new PageInfo<>(PunIsHmEnTs_realTimeList);
         model.addAttribute("PunIsHmEnTs_realTimePageInfo",PunIsHmEnTs_realTimePageInfo);
         model.addAttribute("PunIsHmEnTs_realTimeList",PunIsHmEnTs_realTimeList);
-        model.addAttribute("pageTopBarInfo","AdvancedBan数据-实时");
-        model.addAttribute("activeUrl1","playerDataActive");
-        model.addAttribute("activeUrl2","advancedBanDataActive");
-        model.addAttribute("activeUrl3","realTimeDataActive");
+        model.addAttribute("pageTopBarInfo","实时数据（正在执行中的封禁）");
+        model.addAttribute("activeUrl1","advancedBanDataActive");
+        model.addAttribute("activeUrl2","realTimeDataActive");
         return "admin/data/advancedBanData_realTime";
     }
 }

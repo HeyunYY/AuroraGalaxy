@@ -60,7 +60,7 @@ public class AdminController {
     @RequestMapping("/checkKey")
     @ResponseBody
     public JsonUtils checkKey(@RequestParam("key")String key, HttpSession session){
-        if (key.equals("W7rpG2s13ADfhO8T6YIR9zXmKpLCq0")){
+        if (key.equals("wF2#RhsfM3BLU9jg*UcDM8DUHhBJ_SBzQdQBA49tU3x#E6AxTvQsf5PtUn#aXT3m5H!HbbMzX0EBVWltJ7wcRkMiHaWpLoH0w!Xa")){
             session.setAttribute("checkKey","true");
             session.setAttribute("checkKey_error", "密钥验证通过，已允许数据访问");
             return JsonUtils.success();

@@ -50,6 +50,9 @@ public class IndexController {
 
     @GetMapping("/return_home")
     public String return_home(HttpSession session) {
+        session.removeAttribute("username");
+        session.removeAttribute("checkKey");
+        session.removeAttribute("checkKey_error");
         session.setAttribute("disclaimers_message", "");
         return "index";
     }

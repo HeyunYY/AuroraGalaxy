@@ -70,7 +70,10 @@ public class MyInterceptor implements HandlerInterceptor {
                 return true;
             }
             if (session.getAttribute("username") != null) {
-                if(requestURI.contains("/admin/data")){
+                if(requestURI.equals("/admin/index.html")){
+                    return true;
+                }
+                if(requestURI.contains("/admin/data/")){
                     String checkKeyValue = (String)session.getAttribute("checkKey");
                     if (checkKeyValue != null && checkKeyValue.equals("true")) {
                         session.setAttribute("checkKey_error", "");
