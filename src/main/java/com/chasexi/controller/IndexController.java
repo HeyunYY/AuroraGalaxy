@@ -33,6 +33,11 @@ public class IndexController {
         return "error";
     }
 
+    @GetMapping("/err.html")
+    public String err() {
+        return "err";
+    }
+
     @GetMapping("/index.html")
     public String index() {
         return "index";
@@ -53,8 +58,11 @@ public class IndexController {
         session.removeAttribute("username");
         session.removeAttribute("checkKey");
         session.removeAttribute("checkKey_error");
-        session.setAttribute("disclaimers_message", "");
+        session.removeAttribute("disclaimers_message");
+        //销毁
+        session.invalidate();
         return "index";
+
     }
 
 //    @ResponseBody

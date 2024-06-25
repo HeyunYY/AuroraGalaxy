@@ -44,17 +44,17 @@
                 ><a href="javascript:void(0)"><i class="mdi mdi-account-outline"></i>玩家信息</a>
                     <ul class="nav nav-subnav">
                         <li th:class="${activeUrl2=='loginDataActive'?'active':''}"><a class="Important-data"
-                                th:href="@{/admin/data/toLoginData.html}">登录数据</a></li>
+                                th:href="@{/admin/data/player/toLoginData.html}">登录数据</a></li>
                         <li  class="nav-item nav-item-has-subnav"
                              th:class="${activeUrl2=='UltraSetHomeDataActive'?'nav-item nav-item-has-subnav active open':'nav-item nav-item-has-subnav'}"
                         ><a href="javascript:void(0)">传送点数据</a>
                             <ul class="nav nav-subnav">
                                 <li th:class="${activeUrl3=='homesDataActive'?'active':''}"><a class="Important-data"
-                                        th:href="@{/admin/data/toUltraSetHomeData/homes.html}">homes数据</a></li>
+                                        th:href="@{/admin/data/player/toUltraSetHomeData/homes.html}">homes数据</a></li>
                                 <li th:class="${activeUrl3=='pendingDataActive'?'active':''}"><a class="Important-data"
-                                        th:href="@{/admin/data/toUltraSetHomeData/pending.html}">pending数据</a></li>
+                                        th:href="@{/admin/data/player/toUltraSetHomeData/pending.html}">pending数据</a></li>
                                 <li th:class="${activeUrl3=='playersDataActive'?'active':''}"><a class="Important-data"
-                                        th:href="@{/admin/data/toUltraSetHomeData/players.html}">players数据</a></li>
+                                        th:href="@{/admin/data/player/toUltraSetHomeData/players.html}">players数据</a></li>
                             </ul>
                         </li>
 
@@ -65,9 +65,9 @@
                     <a href="javascript:void(0)"><i class="mdi mdi-block-helper"></i>封禁记录</a>
                     <ul class="nav nav-subnav">
                         <li th:class="${activeUrl2=='historyDataActive'?'active':''}"><a
-                                th:href="@{/admin/data/toAdvancedBanData/history.html}">历史数据</a></li>
+                                th:href="@{/admin/data/ban/toAdvancedBanData/history.html}">历史数据</a></li>
                         <li th:class="${activeUrl2=='realTimeDataActive'?'active':''}"><a
-                                th:href="@{/admin/data/toAdvancedBanData/realTime.html}">实时数据</a></li>
+                                th:href="@{/admin/data/ban/toAdvancedBanData/realTime.html}">实时数据</a></li>
                     </ul>
                 </li>
 

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <!--    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">-->
+    <!--    <meta name="viewport"-->
+    <!--          content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>-->
+    <title>访问错误</title>
+    <link rel="icon" th:href="@{/img/Aurora_ico_2.jpg}" sizes="16x16">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: auto;  /*允许滚动*/
+        }
+
+        .login-container {
+            width: 70%;
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);
+            animation: slideIn 0.5s ease-in-out;
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .input-group input {
+            /*flex: 1; !* 让 input 元素占据剩余空间 *!*/
+            padding: 10px 0;
+            font-size: 16px;
+            border: none;
+            outline: none;
+            background: none;
+            border-bottom: 1px solid grey;
+            margin-right: 10px; /* 增加右边距，与 span 元素隔开 */
+        }
+
+        .input-group span {
+            font-size: 16px;
+            color: #666;
+        }
+
+        .submit-true {
+            width: 100%;
+            padding: 10px 0;
+            background: #e91e63;
+            border: none;
+            outline: none;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+            transition: background-color 0.5s /* 添加渐变效果 */
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        p{
+            margin-top: 8px;
+            margin-bottom: 8px;
+        }
+
+        .submit-true:hover {
+            background-color: skyblue; /* 鼠标悬停时背景颜色变为白色 */
+            /*color: red; !* 鼠标悬停时文字颜色变为红色 *!*/
+        }
+
+
+        /*Responsive styles */
+        @media only screen and (max-width: 600px) {
+            .login-container {
+                width: 100%;
+                border-radius: 0;
+            }
+        }
+
+    </style>
+</head>
+<body>
+<div class="login-container">
+    <img th:src="@{/img/Aurora_logo.png}" alt="">
+    <h1>访问已被拦截</h1>
+    <h2>为保证数据安全，本网址仅支持https协议访问，您当前使用http，请切换后重试</h2>
+    <!--    <br>-->
+    <!--    <span style="color: red;" id="span_message" th:text="${session.disclaimers_message}"></span>-->
+    <!--    <button id="form-button" type="button" class="submit-true">我已阅读并同意上述免责声明 - 访问网站</button>-->
+</div>
+</body>
+
+</html>

@@ -24,7 +24,8 @@
                 <!--个人信息-->
                 <li class="dropdown dropdown-profile" style="margin-right: 20px">
                     <a href="javascript:void(0)" data-toggle="dropdown">
-                        管理员：
+                        <span th:if="${session.adminType == 1}">管理员：</span>
+                        <span th:if="${session.adminType == 2}">网站管理员：</span>
                         <span th:text="${session.username}">
 								<span class="caret"></span>
 						</span>

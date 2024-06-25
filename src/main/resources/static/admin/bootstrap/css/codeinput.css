@@ -1,0 +1,71 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+}
+
+.container {
+    text-align: center;
+}
+
+.input-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.code-input {
+    width: 40px;
+    height: 40px;
+    font-size: 24px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+}
+
+.code-input:focus {
+    border-color: #007BFF;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+
+/*document.addEventListener("DOMContentLoaded", function() {*/
+/*    const inputs = document.querySelectorAll(".code-input");*/
+
+/*inputs.forEach((input, index) => {*/
+/*input.addEventListener("input", () => {*/
+/*    if (input.value.length > 0 && index < inputs.length - 1) {*/
+/*inputs[index + 1].focus();*/
+/*}*/
+/*});*/
+
+/*input.addEventListener("keydown", (event) => {*/
+/*    if (event.key === "Backspace" && input.value.length === 0 && index > 0) {*/
+/*inputs[index - 1].focus();*/
+/*}*/
+/*});*/
+/*});*/
+/*});*/
+
+
+/*<body>*/
+/*<div class="container">*/
+/*<h2>请输入6位验证码</h2>*/
+/*<div class="input-container">*/
+/*<input type="text" maxlength="1" class="code-input" />*/
+/*<input type="text" maxlength="1" class="code-input" />*/
+/*<input type="text" maxlength="1" class="code-input" />*/
+/*<input type="text" maxlength="1" class="code-input" />*/
+/*<input type="text" maxlength="1" class="code-input" />*/
+/*<input type="text" maxlength="1" class="code-input" />*/
+/*</div>*/
+/*</div>*/
+
+/*<script src="script.js"></script>*/
+/*</body>*/

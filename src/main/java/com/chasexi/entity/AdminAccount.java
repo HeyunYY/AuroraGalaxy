@@ -23,4 +23,7 @@ public class AdminAccount {
     private String password;
     private int enable;
     private int online;
+    private int type;
+    private int fa2;
+    private String fa2Time;
 }

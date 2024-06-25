@@ -4,11 +4,9 @@ import com.chasexi.entity.*;
 import com.chasexi.service.impl.MainServiceImpl;
 import com.chasexi.utils.JsonUtils;
 import com.github.pagehelper.PageInfo;
-import org.apache.shiro.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -99,7 +97,7 @@ public class MainController {
 
     // ---------------------------------------------------
 
-    @RequestMapping("/data/toLoginData.html")
+    @RequestMapping("/data/player/toLoginData.html")
     public String LoginData(Model model,@RequestParam(value = "pageNum", defaultValue = "1")int pageNum,
                                   @RequestParam(value = "pageSize", defaultValue = "10")int pageSize) {
         List<Authme> authmeList = mainService.SelectAuthme_homepage(pageNum,pageSize);
@@ -126,9 +124,9 @@ public class MainController {
         model.addAttribute("pageTopBarInfo","登录数据");
         model.addAttribute("activeUrl1","playerDataActive");
         model.addAttribute("activeUrl2","loginDataActive");
-        return "admin/data/loginData";
+        return "admin/data/player/loginData";
     }
-    @RequestMapping("/data/toUltraSetHomeData/homes.html")
+    @RequestMapping("/data/player/toUltraSetHomeData/homes.html")
     public String UltraSetHomeHomesData(Model model,@RequestParam(value = "pageNum", defaultValue = "1")int pageNum,
                                   @RequestParam(value = "pageSize", defaultValue = "10")int pageSize) {
         List<UlTraSetHomeHomes> UlTraSetHomeHomesList = mainService.selectUlTraSetHomeHomesAll(pageNum,pageSize);
@@ -140,9 +138,9 @@ public class MainController {
         model.addAttribute("activeUrl1","playerDataActive");
         model.addAttribute("activeUrl2","UltraSetHomeDataActive");
         model.addAttribute("activeUrl3","homesDataActive");
-        return "admin/data/ultraSetHomeHomesData";
+        return "admin/data/player/ultraSetHomeHomesData";
     }
-    @RequestMapping("/data/toUltraSetHomeData/pending.html")
+    @RequestMapping("/data/player/toUltraSetHomeData/pending.html")
     public String UltraSetHomePendingData(Model model,@RequestParam(value = "pageNum", defaultValue = "1")int pageNum,
                                         @RequestParam(value = "pageSize", defaultValue = "10")int pageSize) {
         List<UlTraSetHomePending> UlTraSetHomePendingList = mainService.selectUlTraSetHomePendingAll(pageNum,pageSize);
@@ -154,9 +152,9 @@ public class MainController {
         model.addAttribute("activeUrl1","playerDataActive");
         model.addAttribute("activeUrl2","UltraSetHomeDataActive");
         model.addAttribute("activeUrl3","pendingDataActive");
-        return "admin/data/ultraSetHomePendingData";
+        return "admin/data/player/ultraSetHomePendingData";
     }
-    @RequestMapping("/data/toUltraSetHomeData/players.html")
+    @RequestMapping("/data/player/toUltraSetHomeData/players.html")
     public String UltraSetHomePlayersData(Model model,@RequestParam(value = "pageNum", defaultValue = "1")int pageNum,
                                         @RequestParam(value = "pageSize", defaultValue = "10")int pageSize) {
         List<UlTraSetHomePlayers> UltraSetHomePlayersList = mainService.selectUlTraSetHomePlayersAll(pageNum,pageSize);
@@ -168,9 +166,9 @@ public class MainController {
         model.addAttribute("activeUrl1","playerDataActive");
         model.addAttribute("activeUrl2","UltraSetHomeDataActive");
         model.addAttribute("activeUrl3","playersDataActive");
-        return "admin/data/ultraSetHomePlayersData";
+        return "admin/data/player/ultraSetHomePlayersData";
     }
-    @RequestMapping("/data/toAdvancedBanData/history.html")
+    @RequestMapping("/data/ban/toAdvancedBanData/history.html")
     public String AdvancedBanData_history(Model model,@RequestParam(value = "pageNum", defaultValue = "1")int pageNum,
                                   @RequestParam(value = "pageSize", defaultValue = "10")int pageSize) {
         List<PunIsHmEnTs> PunIsHmEnTs_historyList = mainService.selectPunIsHmEnTs_historyAll(pageNum,pageSize);
@@ -181,9 +179,9 @@ public class MainController {
         model.addAttribute("pageTopBarInfo","历史数据（已经解除封禁 或 警告）");
         model.addAttribute("activeUrl1","advancedBanDataActive");
         model.addAttribute("activeUrl2","historyDataActive");
-        return "admin/data/advancedBanData_history";
+        return "admin/data/ban/advancedBanData_history";
     }
-    @RequestMapping("/data/toAdvancedBanData/realTime.html")
+    @RequestMapping("/data/ban/toAdvancedBanData/realTime.html")
     public String AdvancedBanData_realTime(Model model,@RequestParam(value = "pageNum", defaultValue = "1")int pageNum,
                                           @RequestParam(value = "pageSize", defaultValue = "10")int pageSize) {
         List<PunIsHmEnTs> PunIsHmEnTs_realTimeList = mainService.selectPunIsHmEnTs_realTimeAll(pageNum,pageSize);
@@ -194,6 +192,6 @@ public class MainController {
         model.addAttribute("pageTopBarInfo","实时数据（正在执行中的封禁）");
         model.addAttribute("activeUrl1","advancedBanDataActive");
         model.addAttribute("activeUrl2","realTimeDataActive");
-        return "admin/data/advancedBanData_realTime";
+        return "admin/data/ban/advancedBanData_realTime";
     }
 }

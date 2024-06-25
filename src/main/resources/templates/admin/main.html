@@ -14,10 +14,11 @@
     <!--自定义样式-->
     <link href="../admin/lyear/css/style.min.css" th:href="@{/admin/lyear/css/style.min.css}" rel="stylesheet" type="text/css"/>
 
+    <link th:href="@{/admin/bootstrap/css/animation.css}" rel="stylesheet" type="text/css"/>
     <style>
         /* 设置输入框宽度为100% */
         input[type="password"] {
-            width: 90%;
+            width: 10%;
             border: none; /* 删除输入框的边框 */
             border-bottom: 1px solid #000; /* 只保留下方的边框 */
             outline: none; /* 删除输入框的轮廓线 */
@@ -31,6 +32,13 @@
             padding: 3px 5px 3px 5px; /* 设置内边距 */
             cursor: pointer; /* 设置鼠标样式为手型 */
             border-radius: 3px; /* 设置按钮圆角为1px */
+            transition: background-color 0.3s, color 0.3s, transform 0.3s; /* 添加过渡效果 */
+        }
+        /* 鼠标放置时的动画效果 */
+        button:hover {
+            background-color: #45b8a6; /* 鼠标放置时的背景色 */
+            color: white; /* 鼠标放置时的文字颜色 */
+            transform: scale(1.05); /* 鼠标放置时的缩放效果 */
         }
         #love{
             font-size: 20px;
@@ -38,6 +46,21 @@
         }
         #check_key_result{
             font-size: 14px;
+        }
+
+        .code-input {
+            width: 40px;
+            height: 40px;
+            font-size: 24px;
+            text-align: center;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        .code-input:focus {
+            border-color: #007BFF;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
         }
     </style>
 </head>
@@ -50,7 +73,7 @@
         <div th:replace="admin/common/topbar::#topbarheader"></div>
 
         <!--页面主要内容-->
-        <main class="lyear-layout-content">
+        <main class="lyear-layout-content slide-in-left">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12">
@@ -69,15 +92,37 @@
                         </div>
                         <div class="card">
                             <div class="card-header">
-                                <h4>为保证游戏服务器数据安全，如需访问玩家数据，请输入密钥来验证你的身份</h4>
-                            </div>
-                            <div class="card-header" id="key_input">
-                                <h4>密钥：<input type="password" id="key" name="key" placeholder="请输入密钥" /></h4>
+                                <h4>为保证游戏服务器数据安全，请进行身份验证</h4>
                             </div>
                             <div class="card-header">
-                                <h4><button onclick="check_key()" id="check_key">验证</button>
-                                    <i id="check_key_result" th:text="${session.checkKey_error}"></i></h4>
+                                <h4>本网站使用双因素身份验证（2FA），请使用手机应用 Authenticator 或 其他支持2FA的软件 获取动态密钥</h4>
                             </div>
+                            <div th:if="${session.FA2 == 0}">
+                                <div class="card-header">
+                                    <h4 style="color: red;">您还未绑定动态密钥，请联系网站管理员进行绑定</h4>
+                                </div>
+                            </div>
+                            <div th:if="${session.FA2 == 1}">
+<!--                                <div class="card-header" id="key_input">-->
+<!--                                    <h4>密钥：<input type="password" id="key" name="key" placeholder="请输入6位动态密钥" /></h4>-->
+<!--                                </div>-->
+                                <div class="card-header" id="key_input" style="width: auto;">
+                                    <h4>请输入6位密钥：</h4>
+                                    <div class="input-container">
+                                        <input type="text" maxlength="1" class="code-input" />
+                                        <input type="text" maxlength="1" class="code-input" />
+                                        <input type="text" maxlength="1" class="code-input" />
+                                        <input type="text" maxlength="1" class="code-input" />
+                                        <input type="text" maxlength="1" class="code-input" />
+                                        <input type="text" maxlength="1" class="code-input" />
+                                    </div>
+                                </div>
+                                <div class="card-header">
+                                    <h4><button onclick="check_key()" id="check_key">手动验证</button>
+                                        <i id="check_key_result" th:text="${session.checkKey_error}"></i></h4>
+                                </div>
+                            </div>
+
                         </div>
                         <div class="card">
                             <div class="card-header">
@@ -117,6 +162,7 @@
             $("#love").text(data.data.content);
         });
     });
+
     $(function () {
         let check_key_result = $("#check_key_result");
         if (check_key_result.text() === "密钥验证失败或密钥已经过期！"){
@@ -129,49 +175,151 @@
         }
     });
 
+    let check_key_result = $("#check_key_result")
     function check_key() {
-        let check_key_result = $("#check_key_result")
-        let key = $("#key");
-        let key_a = key.val();
-        check_key_result.text("");
-        const keyRegex = /^[A-Za-z0-9#!*_]{100}$/;
-        if (!key_a.match(keyRegex)) {
-            check_key_result.text("密钥格式错误! （密钥由100位大小写的英文字母，数字，以及特殊符号组成）").css("color", "red");
-            key.val("");
-            return false;
+        var code = Array.from(inputs).map(function(input) {
+            return input.value;
+        }).join('');
+        if (code.length === inputs.length) {
+            if(!codeRegex(code)){
+                return false;
+            }
+            if(!checkAttempts()){
+                return false;
+            }
+            validateCode(code)
+        }else{
+            check_key_result.text("密钥格式错误!").css("color", "red");
+            Array.from(inputs).forEach(function(input) {
+                input.value = ''; // 清空输入框的值
+            });
+            inputs[0].focus();
         }
-        $.ajax({
-            type: "POST",
-            url: "/admin/checkKey",
-            data: {
-                key: key.val()
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const inputs = document.querySelectorAll(".code-input");
+
+        inputs.forEach((input, index) => {
+            input.addEventListener("input", () => {
+                if (input.value.length > 0 && index < inputs.length - 1) {
+                    inputs[index + 1].focus();
+                }
+            });
+
+            input.addEventListener("keydown", (event) => {
+                if (event.key === "Backspace" && input.value.length === 0 && index > 0) {
+                    inputs[index - 1].focus();
+                }
+            });
+        });
+    });
+
+    // 获取所有的输入框
+    var inputs = document.querySelectorAll('.code-input');
+    // 监听最后一个输入框的输入事件
+    inputs[inputs.length - 1].addEventListener('input', function() {
+        var code = Array.from(inputs).map(function(input) {
+            return input.value;
+        }).join('');
+        if (code.length === inputs.length) {
+            if(!codeRegex(code)){
+                return false;
+            }
+            if(!checkAttempts()){
+                return false;
+            }
+            validateCode(code)
+        }
+    });
+    function validateCode(code_){
+        fetch('/2fa/verify', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
             },
-            success: function (data) {
-                if (data.code === 100) {
-                    key.val("");
+            body: JSON.stringify({ code: parseInt(code_) })
+        })
+            .then(response => response.text())
+            .then(data => {
+                if (data === '200'){
                     $("#key_input").remove();
                     $("#check_key").remove();
                     check_key_result.text("密钥验证通过，已允许数据访问").css("color", "green");
                 } else {
-                    check_key_result.text("密钥错误！").css("color", "red");
-                    key.val("");
+                    // check_key_result.text("密钥错误！").css("color", "red");
+                    // 计算剩余尝试次数
+                    var remainingAttempts = MAX_ATTEMPTS - getAttempts().length;
+                    check_key_result.text(`密钥验证失败，您还有${remainingAttempts}次机会`).css("color", "orange");
+                    Array.from(inputs).forEach(function(input) {
+                        input.value = ''; // 清空输入框的值
+                    });
+                    inputs[0].focus();
                 }
-            }
-        })
+            });
     }
 
-    function getUserOsInfo() {
-        const userAgent = navigator.userAgent;
-        if (userAgent.indexOf("Windows NT 10.0") !== -1) return "Windows";
-        if (userAgent.indexOf("Windows NT 6.2") !== -1) return "Windows";
-        if (userAgent.indexOf("Windows NT 6.1") !== -1) return "Windows";
-        if (userAgent.indexOf("Windows NT 6.0") !== -1) return "Windows";
-        if (userAgent.indexOf("Windows NT 5.1") !== -1) return "Windows";
-        if (userAgent.indexOf("Windows NT 5.0") !== -1) return "Windows";
-        if (userAgent.indexOf("Mac") !== -1) return "Mac/iOS";
-        if (userAgent.indexOf("X11") !== -1) return "UNIX";
-        if (userAgent.indexOf("Linux") !== -1) return "Linux";
-        return "Other";
+    function codeRegex(code_){
+        const Regex = /^\d{6}$/;
+        if (!code_.match(Regex)) {
+            check_key_result.text("密钥格式错误!").css("color", "red");
+            Array.from(inputs).forEach(function(input) {
+                input.value = ''; // 清空输入框的值
+            });
+            inputs[0].focus();
+            return false;
+        }else {
+            return true;
+        }
+    }
+
+    inputs.forEach(function(input, index) {
+        input.addEventListener('focus', function() {
+            // 检查当前输入框是否为空
+            if (input.value === '') {
+                // 检查是否有更前面的输入框也为空
+                for (var i = 0; i < inputs.length; i++) {
+                    if (inputs[i].value === '') {
+                        inputs[i].focus();
+                        break;
+                    }
+                }
+            }
+        });
+    });
+
+    var MAX_ATTEMPTS = 5;
+    var TIME_WINDOW_MS = 10 * 60 * 1000; // 10 minutes in milliseconds
+    var ATTEMPTS_KEY = 'attempts';
+    function getAttempts() {
+        var attempts = localStorage.getItem(ATTEMPTS_KEY);
+        return attempts ? JSON.parse(attempts) : [];
+    }
+    function setAttempts(attempts) {
+        localStorage.setItem(ATTEMPTS_KEY, JSON.stringify(attempts));
+    }
+    function checkAttempts() {
+        var now = Date.now();
+        var attempts = getAttempts();
+
+        // 过滤掉超出时间窗口的尝试记录
+        attempts = attempts.filter(function(timestamp) {
+            return now - timestamp < TIME_WINDOW_MS;
+        });
+
+        if (attempts.length >= MAX_ATTEMPTS) {
+            var firstAttemptTime = Math.min.apply(null, attempts); // 获取最早的尝试时间
+            var timeLeft = TIME_WINDOW_MS - (now - firstAttemptTime);
+            var minutesLeft = Math.floor(timeLeft / 60000); // 剩余分钟数
+            var secondsLeft = Math.ceil((timeLeft % 60000) / 1000); // 剩余秒数
+
+            check_key_result.text(`尝试次数过多，请等待 ${minutesLeft} 分钟 ${secondsLeft} 秒后再试`).css("color", "red");
+            return false;
+        }
+        // 添加当前尝试的时间戳
+        attempts.push(now);
+        setAttempts(attempts);
+        return true;
     }
 
 </script>

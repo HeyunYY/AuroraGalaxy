@@ -41,6 +41,9 @@ public class AdminController {
             // 在登录时创建Session并存储用户信息
             session.setAttribute("userId", adminAccount.getUid());
             session.setAttribute("username",adminAccount.getShowName());
+            session.setAttribute("adminType",adminAccount.getType());
+            session.setAttribute("FA2",adminAccount.getFa2());
+//            session.setAttribute("FA2Time",adminAccount.getFa2Time());
             return JsonUtils.success().add("url","/admin/index.html");
         }else {
             return JsonUtils.fail().add("error","很抱歉，您提供的凭证无法确认您的身份");
@@ -52,7 +55,8 @@ public class AdminController {
         session.removeAttribute("username");
         session.removeAttribute("checkKey");
         session.removeAttribute("checkKey_error");
-//        session.invalidate(); // 销毁session
+        //销毁
+        session.invalidate();
         return "index";
     }
 
