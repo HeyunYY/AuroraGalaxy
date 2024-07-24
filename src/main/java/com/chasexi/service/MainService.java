@@ -16,7 +16,7 @@ public interface MainService {
     public List<LeaveMessage> selectMessageAll(int pageNum,int pageSize);
     public List<LeaveMessage> selectMessageShow(int pageNum,int pageSize);
     public List<LeaveMessage> selectMessageNotShow(int pageNum,int pageSize);
-    public List<Authme> selectAuthmeAll(int pageNum, int pageSize);
+    public List<Authme> SelectAuthme_homepage(int pageNum, int pageSize);
     public List<PunIsHmEnTs> selectPunIsHmEnTs_historyAll(int pageNum, int pageSize);
     public List<PunIsHmEnTs> selectPunIsHmEnTs_realTimeAll(int pageNum, int pageSize);
     public List<UlTraSetHomeHomes> selectUlTraSetHomeHomesAll(int pageNum, int pageSize);

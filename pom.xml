@@ -17,91 +17,116 @@
         <java.version>1.8</java.version>
     </properties>
     <dependencies>
+        <!-- PageHelper的Spring Boot Starter，用于MyBatis的智能分页 -->
         <dependency>
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper-spring-boot-starter</artifactId>
             <version>1.2.10</version>
         </dependency>
+
+        <!-- Alibaba Druid数据库连接池的Spring Boot Starter -->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
             <version>1.2.3</version>
         </dependency>
+
+        <!-- Thymeleaf Extras Shiro，用于在Thymeleaf模板中集成Shiro权限和安全检查 -->
         <dependency>
             <groupId>com.github.theborakompanioni</groupId>
             <artifactId>thymeleaf-extras-shiro</artifactId>
             <version>2.0.0</version>
         </dependency>
 
+        <!-- Apache Shiro集成Spring框架的支持 -->
         <dependency>
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-spring</artifactId>
             <version>1.4.1</version>
         </dependency>
+
+        <!-- Spring Boot Thymeleaf启动器，提供Thymeleaf模板引擎的配置和依赖 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
+
+        <!-- Spring Boot Web启动器，提供Web应用的基本功能，如Spring MVC -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
+        <!-- MyBatis与Spring Boot集成的启动器 -->
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
             <version>2.1.4</version>
         </dependency>
+
+        <!-- MySQL数据库连接器 -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.6</version>
             <scope>runtime</scope>
         </dependency>
+
+        <!-- Spring Boot DevTools，用于热部署和快速重启 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>
+
+        <!-- Spring Boot配置处理器，用于处理@ConfigurationProperties注解 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
         </dependency>
+
+        <!-- Lombok，用于简化对象模型代码（如Getter, Setter） -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
+
+        <!-- Spring Boot测试启动器，提供JUnit、Mockito等测试依赖 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
 
-        <!-- Google Authenticator -->
+        <!-- Google Authenticator库，用于实现两步验证 -->
         <dependency>
             <groupId>com.warrenstrange</groupId>
             <artifactId>googleauth</artifactId>
             <version>1.4.0</version>
         </dependency>
 
-        <!-- ZXing for QR code generation -->
+        <!-- ZXing核心库，用于生成和解析二维码 -->
         <dependency>
             <groupId>com.google.zxing</groupId>
             <artifactId>core</artifactId>
             <version>3.4.1</version>
         </dependency>
+
+        <!-- ZXing Java SE平台支持库 -->
         <dependency>
             <groupId>com.google.zxing</groupId>
             <artifactId>javase</artifactId>
             <version>3.4.1</version>
         </dependency>
 
+        <!-- Spring Security核心库 -->
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
-            <version>5.5.0</version> <!-- 替换为你项目中使用的版本号 -->
+            <version>5.5.0</version>
         </dependency>
     </dependencies>
 

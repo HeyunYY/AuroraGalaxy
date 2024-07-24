@@ -19,4 +19,7 @@ public interface IndexMapper {
     @Insert("insert into leave_message (qqNumber, qqName, gameName, message, messageTime, submitMethod, exhibition) " +
             "values (#{qqNumber},#{qqName},#{gameName},#{message},#{messageTime},#{submitMethod},#{exhibition})")
     public int submitMessage(LeaveMessage leaveMessage);
+
+    @Select("select * from leave_message where exhibition=1")
+    public List<LeaveMessage> getMessage();
 }

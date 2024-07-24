@@ -14,7 +14,8 @@ import java.util.List;
  * @Description:
  */
 public interface AuthmeService {
-    public List<Authme> SelectAuthmeAll();
+    public List<Authme> SelectAuthme_homepage();
+    public Authme SelectAuthme_details(int id);
     public Authme SelectAuthmeById(int id);
     public int UpdateAuthme(Authme authme);
     public int InsertAuthme(Authme authme);

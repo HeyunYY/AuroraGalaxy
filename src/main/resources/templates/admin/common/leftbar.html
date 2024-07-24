@@ -103,12 +103,17 @@
                 type:"POST",
                 success:function (data) {
                     if (data.code === 100){
-                        window.open(data.extend.dataPanelLinkUrl)
+                        window.open(data.extend.dataPanelLinkUrl);
                     }else{
-                        location.reload(); // 执行页面刷新
+                        // 重定向到 index 页面
+                        window.location.href = "/admin/index.html";
                     }
+                },
+                error: function() {
+                    // 请求失败时也重定向到 index 页面
+                    window.location.href = "/admin/index.html";
                 }
-            })
+            });
         }
     </script>
 </aside>

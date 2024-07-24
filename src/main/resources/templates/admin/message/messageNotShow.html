@@ -5,6 +5,8 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
     <title>后台管理系统</title>
+    <link rel="apple-touch-icon" href="/img/Aurora_ico_3.jpg">
+    <link rel="shortcut icon" href="/img/Aurora_ico_3.jpg">
     <!-- 引入bootstrap样式 -->
     <link th:href="@{/admin/bootstrap/css/bootstrap.css}" rel="stylesheet" type="text/css">
     <!--图标库-->
@@ -27,10 +29,10 @@
         <div th:replace="admin/common/topbar::#topbarheader"></div>
 
         <!--页面主要内容-->
-        <main class="lyear-layout-content slide-in-left">
+        <main class="lyear-layout-content">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-lg-12">
+                    <div class="col-lg-12 slide-in-left">
                         <div class="card">
                             <div class="card-header">
                                 <h4>留言信息-未展示</h4>

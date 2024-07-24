@@ -17,8 +17,10 @@ import java.util.List;
  */
 @Mapper
 public interface AuthmeMapper {
-    @Select("select * from authme")
-    public List<Authme> SelectAuthmeAll();
+    @Select("select id,username,realname,lastlogin,regdate,isLogged from authme")
+    public List<Authme> SelectAuthme_homepage();
+    @Select("select username,realname,lastlogin,regdate,ip,regip,isLogged,uuid from authme where id=#{id}")
+    public Authme SelectAuthme_details(int id);
     @Select("select * from authme where id=#{id}")
     public Authme SelectAuthmeById(int id);
     public int UpdateAuthme(Authme authme);

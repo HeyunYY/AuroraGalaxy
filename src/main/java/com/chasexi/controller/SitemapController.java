@@ -5,12 +5,13 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 /**
  * Created with IntelliJ IDEA.
@@ -37,5 +38,21 @@ public class SitemapController {
         }
 
         return ResponseEntity.ok().body(content.toString());
+    }
+
+    /**
+     * robots.txt
+     * @ return
+     */
+
+    @GetMapping("/robots.txt")
+    public void robotsTxt(HttpServletResponse response) throws IOException {
+        Writer writer = response.getWriter();
+        String lineSeparator = System.getProperty("line.separator", "\n");
+        writer.append("User-agent: *").append(lineSeparator);
+        writer.append("Disallow:").append("/mapper").append(lineSeparator);
+        writer.append("Disallow:").append("/static").append(lineSeparator);
+        writer.append("Disallow:").append("/admin").append(lineSeparator);
+        writer.append("Disallow:").append("/private").append(lineSeparator);
     }
 }

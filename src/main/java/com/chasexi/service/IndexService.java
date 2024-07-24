@@ -2,6 +2,8 @@ package com.chasexi.service;
 
 import com.chasexi.entity.LeaveMessage;
 
+import java.util.List;
+
 /**
  * Created with IntelliJ IDEA.
  *
@@ -11,4 +13,5 @@ import com.chasexi.entity.LeaveMessage;
  */
 public interface IndexService {
     public int submitMessage(LeaveMessage leaveMessage);
+    public List<LeaveMessage> getMessage();
 }

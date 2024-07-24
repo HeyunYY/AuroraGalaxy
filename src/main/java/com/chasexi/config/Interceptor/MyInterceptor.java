@@ -5,9 +5,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.chasexi.entity.LeaveMessage;
+import com.chasexi.service.IndexService;
+import com.chasexi.service.impl.IndexServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,6 +26,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Component
 public class MyInterceptor implements HandlerInterceptor {
+
+    @Autowired
+    private IndexService indexService;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
@@ -30,15 +40,27 @@ public class MyInterceptor implements HandlerInterceptor {
 //            System.out.println("发现资源请求：[" + requestURI + "] - 处理方式：放行");
             return true;
         }
+        if (requestURI.equals("/")) {
+            session.removeAttribute("leaveMessageList");
+            List<LeaveMessage> LeaveMessageList = indexService.getMessage();
+            if (!LeaveMessageList.isEmpty()){
+                session.setAttribute("leaveMessageList", LeaveMessageList);
+            }
+            return true;
+        }
+        if (requestURI.equals("/return_home")) {
+            session.removeAttribute("leaveMessageList");
+            List<LeaveMessage> LeaveMessageList = indexService.getMessage();
+            if (!LeaveMessageList.isEmpty()){
+                session.setAttribute("leaveMessageList", LeaveMessageList);
+            }
+            return true;
+        }
         if (requestURI.equals("/disclaimers_privacy.html")){
 //            System.out.println("发现请求：[" + requestURI + "] - 处理方式：放行");
             return true;
         }
         if (requestURI.equals("/error")){
-            return true;
-        }
-        if (requestURI.equals("/")) {
-//            System.out.println("发现请求：[" + requestURI + "] - 处理方式：放行");
             return true;
         }
         if (requestURI.equals("/Not_disclaimers")) {
@@ -69,6 +91,11 @@ public class MyInterceptor implements HandlerInterceptor {
             if(requestURI.equals("/admin/logout")){
                 return true;
             }
+//            强制使用 HTTPS（测试时请关闭此项）
+//            if (!request.isSecure()) {
+//                response.sendRedirect("https://" + request.getServerName() + request.getRequestURI());
+//                return false;
+//            }
             if (session.getAttribute("username") != null) {
                 if(requestURI.equals("/admin/index.html")){
                     return true;
@@ -76,7 +103,7 @@ public class MyInterceptor implements HandlerInterceptor {
                 if(requestURI.contains("/admin/data/")){
                     String checkKeyValue = (String)session.getAttribute("checkKey");
                     if (checkKeyValue != null && checkKeyValue.equals("true")) {
-                        session.setAttribute("checkKey_error", "");
+//                        session.setAttribute("checkKey_error", "");
                         return true;
                     }else {
                         session.setAttribute("checkKey_error", "密钥验证失败或密钥已经过期！");

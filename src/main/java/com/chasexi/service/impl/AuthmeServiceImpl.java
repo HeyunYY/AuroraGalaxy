@@ -21,10 +21,14 @@ import java.util.List;
 public class AuthmeServiceImpl implements AuthmeService {
     @Autowired
     private AuthmeMapper authmeMapper;
+    @Override
+    public List<Authme> SelectAuthme_homepage() {
+        return authmeMapper.SelectAuthme_homepage();
+    }
 
     @Override
-    public List<Authme> SelectAuthmeAll() {
-        return authmeMapper.SelectAuthmeAll();
+    public Authme SelectAuthme_details(int id) {
+        return authmeMapper.SelectAuthme_details(id);
     }
 
     @Override

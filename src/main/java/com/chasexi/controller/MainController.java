@@ -48,7 +48,7 @@ public class MainController {
         model.addAttribute("activeUrl","DataActive");
         if (checkKeyValue != null && checkKeyValue.equals("true")) {
             session.setAttribute("checkKey_error", "");
-            return JsonUtils.success().add("dataPanelLinkUrl","http://f.rainplay.cn:52728");
+            return JsonUtils.success().add("dataPanelLinkUrl","http://f.rainplay.cn:43821");
         }else {
             session.setAttribute("checkKey_error", "密钥验证失败或密钥已经过期！");
             return JsonUtils.fail();

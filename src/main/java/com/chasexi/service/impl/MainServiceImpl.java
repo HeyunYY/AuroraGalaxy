@@ -51,9 +51,9 @@ public class MainServiceImpl implements MainService {
     }
 
     @Override
-    public List<Authme> selectAuthmeAll(int pageNum, int pageSize) {
+    public List<Authme> SelectAuthme_homepage(int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
-        return authmeMapper.SelectAuthmeAll();
+        return authmeMapper.SelectAuthme_homepage();
     }
 
     @Override

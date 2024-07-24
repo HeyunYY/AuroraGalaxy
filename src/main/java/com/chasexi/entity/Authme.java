@@ -22,12 +22,14 @@ public class Authme {  // 玩家登录信息
     private String realname; // 真实姓名
     private String password; // 密码
     private String ip; // ip
-    private String lastlogin; // 最后登录时间
+    private long lastlogin; // 最后登录时间
+    private String lastlogin_time;
     private double x; // 坐标
     private double y; // 坐标
     private double z; // 坐标
     private String world; // 世界
     private long regdate; // 注册时间
+    private String regdate_time;
     private String regip; // 注册ip
     private float yaw; // 方向
     private float pitch; // 仰角

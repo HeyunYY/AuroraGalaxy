@@ -7,6 +7,8 @@ import com.chasexi.service.IndexService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Created with IntelliJ IDEA.
  *
@@ -23,5 +25,10 @@ public class IndexServiceImpl implements IndexService {
     @Override
     public int submitMessage(LeaveMessage leaveMessage) {
         return indexMapper.submitMessage(leaveMessage);
+    }
+
+    @Override
+    public List<LeaveMessage> getMessage() {
+        return indexMapper.getMessage();
     }
 }
